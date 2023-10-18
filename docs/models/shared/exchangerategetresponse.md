@@ -1,0 +1,11 @@
+# ExchangeRateGetResponse
+
+
+## Fields
+
+| Field                                                                | Type                                                                 | Required                                                             | Description                                                          | Example                                                              |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `average`                                                            | *Optional[float]*                                                    | :heavy_minus_sign:                                                   | N/A                                                                  | 1.634793477                                                          |
+| `max`                                                                | *Optional[float]*                                                    | :heavy_minus_sign:                                                   | N/A                                                                  | 1.689794369                                                          |
+| `min`                                                                | *Optional[float]*                                                    | :heavy_minus_sign:                                                   | N/A                                                                  | 1.625575716                                                          |
+| `time`                                                               | [date](https://docs.python.org/3/library/datetime.html#date-objects) | :heavy_minus_sign:                                                   | N/A                                                                  | 2022-03-15T06:00:00.000Z                                             |

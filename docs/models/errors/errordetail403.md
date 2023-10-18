@@ -1,0 +1,11 @@
+# ErrorDetail403
+
+error details description
+
+
+## Fields
+
+| Field                                                                                                                              | Type                                                                                                                               | Required                                                                                                                           | Description                                                                                                                        |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `code`                                                                                                                             | [Optional[ErrorCodes403]](../../models/errors/errorcodes403.md)                                                                    | :heavy_minus_sign:                                                                                                                 | The detailed error code associated with HTTP status 403.<br/>* `fx_client_no_access`: The client is authenticated but not authorized.<br/> |
+| `description`                                                                                                                      | *Optional[str]*                                                                                                                    | :heavy_minus_sign:                                                                                                                 | Description of the error.                                                                                                          |
