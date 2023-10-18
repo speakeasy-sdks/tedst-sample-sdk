@@ -1,0 +1,3166 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: experience@nium.com
+    name: NIUM Platform
+    url: https://www.nium.com
+  description: NIUM Platform
+  license:
+    name: Copyright (c) 2023 NIUM
+  title: NIUM Platform
+  version: 9.10.2023
+servers:
+- url: https://gatewaysandbox.nium.com/n1
+tags:
+- name: Rates
+  description: The Rates API
+- name: Quotes
+  description: The Quotes API
+- name: Conversions
+  description: The Conversions API
+- name: Quotes (Previous Version)
+  description: The previous version of the Quotes API
+- name: Conversions (Previous Version)
+  description: The Previous version of the Conversions API
+paths:
+  /api/v2/exchangeRate:
+    get:
+      tags:
+      - Rates
+      summary: Exchange Rate V2
+      description: This API fetches the interbank FX rate for a currency pair. Note
+        that the rate provided does not include the Nium markup.
+      operationId: ExchangeRateV2
+      parameters:
+      - name: sourceCurrencyCode
+        in: query
+        description: This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+          for the source amount.
+        required: true
+        schema:
+          maxLength: 3
+          minLength: 3
+          type: string
+      - name: destinationCurrencyCode
+        in: query
+        description: This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+          for the destination amount.
+        required: true
+        schema:
+          maxLength: 3
+          minLength: 3
+          type: string
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: ExchangeRateV2ResponseDto
+                type: object
+                properties:
+                  destinationAmount:
+                    type: number
+                    description: The credited amount.
+                    format: double
+                    example: 13.42
+                  destinationCurrencyCode:
+                    type: string
+                    description: This field contains the 3-letter [ISO-4217 currency
+                      code](https://www.iso.org/iso-4217-currency-codes.html) for
+                      the destination amount.
+                    example: SGD
+                  ecbFxRate:
+                    type: number
+                    description: 'The ecb exchange rate fetched for the conversion.
+
+                      This field is only applicable for EU and UK.'
+                    format: double
+                    example: 1.349
+                  exchangeRate:
+                    type: number
+                    description: The exchange rate fetched for the conversion.
+                    format: double
+                    example: 1.349
+                  expiryDate:
+                    type: string
+                    description: Timestamp till which the quoted rate is valid. The
+                      timezone is UTC +00.
+                    example: '2021-03-09T06:46:03.000Z'
+                  markupAmount:
+                    type: number
+                    description: In case source or destination amount is provided
+                      the markup amount will be calculated using markupRate.
+                    format: double
+                    example: 0.07
+                  markupRate:
+                    type: number
+                    description: This is the markup rate charged by NIUM.
+                    format: double
+                    example: 0.006745
+                  netExchangeRate:
+                    type: number
+                    description: This is exchangeRate subtracted by the markupRate.
+                    format: double
+                    example: 1.342255
+                  quoteId:
+                    type: string
+                    description: Unique quote Id for the exchange rate.
+                    example: f3632302-1d41-4a40-b7a0-4c456dddbd9e
+                  scalingFactor:
+                    type: integer
+                    description: The netExchangeRate should be divided by the scaling
+                      factor to fetch the actual exchange rate.
+                    format: int32
+                    example: 1
+                  sourceAmount:
+                    type: number
+                    description: An amount to be converted.
+                    format: double
+                    example: 10
+                  sourceCurrencyCode:
+                    type: string
+                    description: This field contains the 3-letter [ISO-4217 currency
+                      code](https://www.iso.org/iso-4217-currency-codes.html) for
+                      the source amount.
+                    example: USD
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      x-info:
+        apiType: external
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      security:
+      - default: []
+  /api/v1/exchangeRates/aggregate:
+    get:
+      tags:
+      - Rates
+      summary: Fetch historic aggregated exchange rates
+      description: This API will retrieve aggregated time series of historical exchange
+        rate.
+      operationId: aggregatedExchangeRates
+      parameters:
+      - $ref: '#/components/parameters/Authorization'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/SCC_QueryParam'
+      - $ref: '#/components/parameters/DCC_QueryParam'
+      - name: start
+        in: query
+        description: The start timestamp used to filter the aggregated time series.
+          Must be in the format 'yyyy-mm-ddTHH:MM:SSZ'.
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        in: query
+        description: The end timestamp used to filter the aggregated time series.
+          Must be in the format 'yyyy-mm-ddTHH:MM:SSZ'.
+        schema:
+          type: string
+          format: date-time
+      - name: window
+        in: query
+        description: Specifies the field by which the results should be grouped.
+        schema:
+          $ref: '#/components/schemas/Window'
+      - description: Enter a unique UUID value.
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                By_Hour:
+                  summary: Aggregated By Hour
+                  value:
+                    sourceCurrencyCode: USD
+                    destinationCurrencyCode: SGD
+                    start: '2022-10-10T10:00:00.000Z'
+                    end: '2022-10-10T12:00:00.000Z'
+                    window: 1_hour
+                    exchangeRates:
+                    - average: 1.399889513
+                      min: 1.374944574
+                      max: 1.398566593
+                      time: '2022-10-10T10:00:00Z'
+                    - average: 1.374467773
+                      min: 1.343376816
+                      max: 1.321947227
+                      time: '2022-10-10T11:00:00Z'
+                    - average: 1.328672475
+                      min: 1.335772491
+                      max: 1.341418158
+                      time: '2022-10-10T12:00:00Z'
+                By_Day:
+                  summary: Aggregated By Day
+                  value:
+                    sourceCurrencyCode: USD
+                    destinationCurrencyCode: SGD
+                    start: '2022-10-11T00:00:00.000Z'
+                    end: '2022-10-14T00:00:00.000Z'
+                    window: 1_day
+                    exchangeRates:
+                    - average: 1.399889513
+                      min: 1.374944574
+                      max: 1.398566593
+                      time: '2022-10-11T00:00:00Z'
+                    - average: 1.374467773
+                      min: 1.343376816
+                      max: 1.321947227
+                      time: '2022-10-12T00:00:00Z'
+                    - average: 1.328672475
+                      min: 1.335772491
+                      max: 1.341418158
+                      time: '2022-10-13T00:00:00Z'
+                    - average: 1.376544187
+                      min: 1.376772491
+                      max: 1.376418158
+                      time: '2022-10-14T00:00:00Z'
+              schema:
+                $ref: '#/components/schemas/ExchangeRatesGetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+      deprecated: false
+      x-info:
+        apiType: external
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/quotes:
+    post:
+      tags:
+      - Quotes
+      summary: Create Quote
+      description: This API creates an FX quote for a currency pair according to the
+        desired lock period and conversion schedule. The FX rate provided by this
+        API includes the Nium markup and can be utilized for any FX conversion within
+        the quote's validity period.
+      operationId: createQuote
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique identifier of the client.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      requestBody:
+        description: quoteCreationRequest
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceCurrencyCode:
+                  maxLength: 3
+                  minLength: 3
+                  type: string
+                  description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                    for the source amount.
+                  example: USD
+                destinationCurrencyCode:
+                  maxLength: 3
+                  minLength: 3
+                  type: string
+                  description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                    for the destination amount.
+                  example: SGD
+                quoteType:
+                  title: QuoteType
+                  type: string
+                  description: "The type of the quote.\n  * `balance_transfer`: Quote\
+                    \ for transferring the balance from one currency to another within\
+                    \ the same customer wallet.\n  * `payout`: Quote for transferring\
+                    \ money to a registered beneficiary's wallet in another currency.\n"
+                  enum:
+                  - balance_transfer
+                  - payout
+                conversionSchedule:
+                  title: ConversionSchedule
+                  type: string
+                  description: The time period after which the conversion should be
+                    settled.
+                  example: immediate
+                  default: immediate
+                  enum:
+                  - immediate
+                  - end_of_day
+                  - next_day
+                  - 2_days
+                lockPeriod:
+                  title: LockPeriod
+                  type: string
+                  description: The duration for which the quote remains valid after
+                    creation.
+                  example: 15_mins
+                  default: 5_mins
+                  enum:
+                  - 5_mins
+                  - 15_mins
+                  - 1_hour
+                  - 4_hours
+                  - 8_hours
+                  - 24_hours
+            examples:
+              With_No_Amount:
+                value:
+                  quoteType: balance_transfer
+                  lockPeriod: 5_mins
+                  conversionSchedule: immediate
+                  sourceCurrencyCode: USD
+                  destinationCurrencyCode: SGD
+                summary: With No Amount
+              With_Source_Amount:
+                value:
+                  quoteType: balance_transfer
+                  lockPeriod: 5_mins
+                  sourceAmount: 100
+                  conversionSchedule: immediate
+                  sourceCurrencyCode: USD
+                  destinationCurrencyCode: SGD
+                summary: With Source Amount
+              With_Destination_Amount:
+                value:
+                  quoteType: balance_transfer
+                  lockPeriod: 5_mins
+                  destinationAmount: 100
+                  conversionSchedule: immediate
+                  sourceCurrencyCode: USD
+                  destinationCurrencyCode: SGD
+                summary: With Destination Amount
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: QuoteCreationResponse
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the quote.
+                    example: quote_1234567890abcdefABCDEF
+                  netExchangeRate:
+                    type: number
+                    description: Exchange rate with markup to be used for the conversion.
+                    format: double
+                    example: 1.342255231
+                  expiryTime:
+                    type: string
+                    description: Expiry time of the quote in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  sourceCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the source amount.
+                    example: USD
+                  destinationCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the destination amount.
+                    example: SGD
+                  quoteType:
+                    title: QuoteType
+                    type: string
+                    description: "The type of the quote.\n  * `balance_transfer`:\
+                      \ Quote for transferring the balance from one currency to another\
+                      \ within the same customer wallet.\n  * `payout`: Quote for\
+                      \ transferring money to a registered beneficiary's wallet in\
+                      \ another currency.\n"
+                    enum:
+                    - balance_transfer
+                    - payout
+                  conversionSchedule:
+                    title: ConversionSchedule
+                    type: string
+                    description: The time period after which the conversion should
+                      be settled.
+                    example: immediate
+                    default: immediate
+                    enum:
+                    - immediate
+                    - end_of_day
+                    - next_day
+                    - 2_days
+                  lockPeriod:
+                    title: LockPeriod
+                    type: string
+                    description: The duration for which the quote remains valid after
+                      creation.
+                    example: 15_mins
+                    default: 5_mins
+                    enum:
+                    - 5_mins
+                    - 15_mins
+                    - 1_hour
+                    - 4_hours
+                    - 8_hours
+                    - 24_hours
+                  exchangeRate:
+                    type: number
+                    description: Foreign exchange market rate for the currency pair,
+                      used as the benchmark for quote calculation.
+                    format: double
+                    example: 1.349324513
+                  markupRate:
+                    type: number
+                    description: Markup rate applied to the exchange rate for the
+                      conversion by Nium.
+                    format: double
+                    example: 0.006745677
+                  ecbExchangeRate:
+                    type: number
+                    description: Europe Central Bank's exchange rate for this currency
+                      pair, provided only for EU and UK.
+                    format: double
+                    example: 1.349324513
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  rateCaptureTime:
+                    title: RateCaptureTime
+                    type: string
+                    description: Time in UTC at which exchange rate was obtained from
+                      the rate provider
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  sourceAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The source amount to be converted to the destination
+                      currency. This value is for reference only and will not be used
+                      as the actual conversion amount.
+                    format: double
+                    example: 13.42
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  destinationAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The amount needed in the destination currency. This
+                      value is for reference only and will not be used as the actual
+                      conversion amount.
+                    format: double
+                    example: 13.42
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  destinationMarkupAmount:
+                    type: number
+                    description: The amount charged in the destination currency as
+                      the markup for the conversion.
+                    format: double
+                    example: 0.07
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  createdTime:
+                    type: string
+                    description: Time of creation in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  isRateStale:
+                    type: boolean
+                    description: Indicates whether the exchange rate provided is stale.
+                      A value of "true" suggests that the exchange rate information
+                      is no longer current. Clients can use this flag to make informed
+                      decisions based on the freshness of the exchange rate.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+              examples:
+                With_Amount:
+                  value:
+                    id: quote_6wBIHIRhPElAHfcgVaDFZs
+                    quoteType: balance_transfer
+                    expiryTime: '2023-06-16 05:07:03'
+                    lockPeriod: 5_mins
+                    markupRate: 0.0093611
+                    createdTime: '2023-06-16 05:02:03'
+                    exchangeRate: 1.3373
+                    sourceAmount: 100
+                    netExchangeRate: 1.3279389
+                    destinationAmount: 132.79
+                    conversionSchedule: immediate
+                    sourceCurrencyCode": USD
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 0.94
+                  summary: With Amounts
+                With_ECB_Rate:
+                  value:
+                    id: quote_6wBIHIRhPElAHfcgVaDFZs
+                    quoteType: balance_transfer
+                    expiryTime: '2023-06-16 05:07:03'
+                    lockPeriod: 5_mins
+                    markupRate: 0.0063973
+                    createdTime: '2023-06-16 05:02:03'
+                    exchangeRate: 0.9139
+                    sourceAmount: 100
+                    ecbExchangeRate: 0.9139
+                    netExchangeRate: 0.9075027
+                    destinationAmount: 90.75
+                    conversionSchedule: immediate
+                    sourceCurrencyCode": EUR
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 0.64
+                  summary: With ECB Rate
+                With_No_Amount:
+                  value:
+                    id: quote_6wBIHIRhPElAHfcgVaDFZs
+                    quoteType: balance_transfer
+                    expiryTime: '2023-06-16 05:07:03'
+                    lockPeriod: 5_mins
+                    markupRate: 0.0093611
+                    createdTime: '2023-06-16 05:02:03'
+                    exchangeRate: 1.3373
+                    sourceAmount: null
+                    netExchangeRate: 1.3279389
+                    destinationAmount: null
+                    conversionSchedule: immediate
+                    sourceCurrencyCode": USD
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: null
+                  summary: With No Amount
+        '400':
+          description: Error response when the request format is invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 400.
+
+
+                            * `fx_constraint_violated_input`: The input violates the
+                            model constraints.
+
+                            * `fx_invalid_format_input`: The input format is invalid.
+
+                            * `fx_invalid_currency_code`: The input currency code
+                            is invalid.
+
+                            * `fx_invalid_currency_amount`: The input currency amount
+                            is invalid.
+
+                            * `fx_missing_input`: The required fields are missing.
+
+                            * `fx_quote_expired`: The provided quote is expired.
+
+                            * `fx_insufficient_balance`: The balance in the account
+                            is insufficient to complete/schedule the transfer.
+
+                            * `fx_transfer_status_invalid`: The transfer status is
+                            invalid.
+
+                            * `fx_locked_period`: The requested conversion is in locked
+                            period.
+
+                            '
+                          enum:
+                          - fx_constraint_violated_input
+                          - fx_invalid_format_input
+                          - fx_invalid_currency_code
+                          - fx_invalid_currency_amount
+                          - fx_missing_input
+                          - fx_quote_expired
+                          - fx_insufficient_balance
+                          - fx_transfer_status_invalid
+                          - fx_locked_period
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '401':
+          description: Error response when the request is unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 401.
+
+                            * `fx_client_unauthenticated`: The client request lacks
+                            valid authentication credentials.
+
+                            '
+                          enum:
+                          - fx_client_unauthenticated
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '403':
+          description: Error response when the requested resource is forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 403.
+
+                            * `fx_client_no_access`: The client is authenticated but
+                            not authorized.
+
+                            '
+                          enum:
+                          - fx_client_no_access
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '404':
+          description: Error response when the requested resource cannot be found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 404.
+
+                            * `fx_quote_not_found`: The provided quote cannot be found
+                            in the service.
+
+                            * `fx_fee_configuration_not_found`: The configuration
+                            cannot be found for at least one of the fees.
+
+                            '
+                          enum:
+                          - fx_quote_not_found
+                          - fx_fee_configuration_not_found
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '500':
+          description: Error response when service has internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 500.
+
+                            * `fx_dependency_error`: Error happens when the service
+                            calls its dependencies.
+
+                            * `fx_uncategorized_error`: Service errors not categorized.
+
+                            '
+                          enum:
+                          - fx_dependency_error
+                          - fx_uncategorized_error
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+      deprecated: false
+      x-info:
+        apiType: external
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      x-codegen-request-body-name: QuoteCreationRequest
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/quotes/{quoteId}:
+    get:
+      tags:
+      - Quotes
+      summary: Fetch Quote by ID
+      description: This API allows to fetch a quote. A quote is used to identify the
+        exchange rate, and associated markup and fees.
+      operationId: fetchQuote
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique identifier of the client.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: quoteId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: Unique identifier of the quote.
+          example: quote_1234567890abcdefABCDEF
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: QuoteCreationResponse
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the quote.
+                    example: quote_1234567890abcdefABCDEF
+                  netExchangeRate:
+                    type: number
+                    description: Exchange rate with markup to be used for the conversion.
+                    format: double
+                    example: 1.342255231
+                  expiryTime:
+                    type: string
+                    description: Expiry time of the quote in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  sourceCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the source amount.
+                    example: USD
+                  destinationCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the destination amount.
+                    example: SGD
+                  quoteType:
+                    title: QuoteType
+                    type: string
+                    description: "The type of the quote.\n  * `balance_transfer`:\
+                      \ Quote for transferring the balance from one currency to another\
+                      \ within the same customer wallet.\n  * `payout`: Quote for\
+                      \ transferring money to a registered beneficiary's wallet in\
+                      \ another currency.\n"
+                    enum:
+                    - balance_transfer
+                    - payout
+                  conversionSchedule:
+                    title: ConversionSchedule
+                    type: string
+                    description: The time period after which the conversion should
+                      be settled.
+                    example: immediate
+                    default: immediate
+                    enum:
+                    - immediate
+                    - end_of_day
+                    - next_day
+                    - 2_days
+                  lockPeriod:
+                    title: LockPeriod
+                    type: string
+                    description: The duration for which the quote remains valid after
+                      creation.
+                    example: 15_mins
+                    default: 5_mins
+                    enum:
+                    - 5_mins
+                    - 15_mins
+                    - 1_hour
+                    - 4_hours
+                    - 8_hours
+                    - 24_hours
+                  exchangeRate:
+                    type: number
+                    description: Foreign exchange market rate for the currency pair,
+                      used as the benchmark for quote calculation.
+                    format: double
+                    example: 1.349324513
+                  markupRate:
+                    type: number
+                    description: Markup rate applied to the exchange rate for the
+                      conversion by Nium.
+                    format: double
+                    example: 0.006745677
+                  ecbExchangeRate:
+                    type: number
+                    description: Europe Central Bank's exchange rate for this currency
+                      pair, provided only for EU and UK.
+                    format: double
+                    example: 1.349324513
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  rateCaptureTime:
+                    title: RateCaptureTime
+                    type: string
+                    description: Time in UTC at which exchange rate was obtained from
+                      the rate provider
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  sourceAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The source amount to be converted to the destination
+                      currency. This value is for reference only and will not be used
+                      as the actual conversion amount.
+                    format: double
+                    example: 13.42
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  destinationAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The amount needed in the destination currency. This
+                      value is for reference only and will not be used as the actual
+                      conversion amount.
+                    format: double
+                    example: 13.42
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  destinationMarkupAmount:
+                    type: number
+                    description: The amount charged in the destination currency as
+                      the markup for the conversion.
+                    format: double
+                    example: 0.07
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  createdTime:
+                    type: string
+                    description: Time of creation in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  isRateStale:
+                    type: boolean
+                    description: Indicates whether the exchange rate provided is stale.
+                      A value of "true" suggests that the exchange rate information
+                      is no longer current. Clients can use this flag to make informed
+                      decisions based on the freshness of the exchange rate.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+              examples:
+                With_Amounts:
+                  value:
+                    id: quote_6wBIHIRhPElAHfcgVaDFZs
+                    quoteType: balance_transfer
+                    expiryTime: '2023-06-16 05:07:03'
+                    lockPeriod: 5_mins
+                    markupRate: 0.0093611
+                    createdTime: '2023-06-16 05:02:03'
+                    exchangeRate: 1.3373
+                    sourceAmount: 100
+                    netExchangeRate: 1.3279389
+                    destinationAmount: 132.79
+                    conversionSchedule: immediate
+                    sourceCurrencyCode": USD
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 0.94
+                  summary: With Amounts
+                With_ECB_Rate:
+                  value:
+                    id: quote_6wBIHIRhPElAHfcgVaDFZs
+                    quoteType: balance_transfer
+                    expiryTime: '2023-06-16 05:07:03'
+                    lockPeriod: 5_mins
+                    markupRate: 0.0063973
+                    createdTime: '2023-06-16 05:02:03'
+                    exchangeRate: 0.9139
+                    sourceAmount: 100
+                    ecbExchangeRate: 0.9139
+                    netExchangeRate: 0.9075027
+                    destinationAmount: 90.75
+                    conversionSchedule: immediate
+                    sourceCurrencyCode": EUR
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 0.64
+                  summary: With ECB Rate
+                With_No_Amount:
+                  value:
+                    id: quote_6wBIHIRhPElAHfcgVaDFZs
+                    quoteType: balance_transfer
+                    expiryTime: '2023-06-16 05:07:03'
+                    lockPeriod: 5_mins
+                    markupRate: 0.0093611
+                    createdTime: '2023-06-16 05:02:03'
+                    exchangeRate: 1.3373
+                    sourceAmount: null
+                    netExchangeRate: 1.3279389
+                    destinationAmount: null
+                    conversionSchedule: immediate
+                    sourceCurrencyCode": USD
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: null
+                  summary: With No Amount
+        '400':
+          description: Error response when the request format is invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 400.
+
+
+                            * `fx_constraint_violated_input`: The input violates the
+                            model constraints.
+
+                            * `fx_invalid_format_input`: The input format is invalid.
+
+                            * `fx_invalid_currency_code`: The input currency code
+                            is invalid.
+
+                            * `fx_invalid_currency_amount`: The input currency amount
+                            is invalid.
+
+                            * `fx_missing_input`: The required fields are missing.
+
+                            * `fx_quote_expired`: The provided quote is expired.
+
+                            * `fx_insufficient_balance`: The balance in the account
+                            is insufficient to complete/schedule the transfer.
+
+                            * `fx_transfer_status_invalid`: The transfer status is
+                            invalid.
+
+                            * `fx_locked_period`: The requested conversion is in locked
+                            period.
+
+                            '
+                          enum:
+                          - fx_constraint_violated_input
+                          - fx_invalid_format_input
+                          - fx_invalid_currency_code
+                          - fx_invalid_currency_amount
+                          - fx_missing_input
+                          - fx_quote_expired
+                          - fx_insufficient_balance
+                          - fx_transfer_status_invalid
+                          - fx_locked_period
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '401':
+          description: Error response when the request is unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 401.
+
+                            * `fx_client_unauthenticated`: The client request lacks
+                            valid authentication credentials.
+
+                            '
+                          enum:
+                          - fx_client_unauthenticated
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '403':
+          description: Error response when the requested resource is forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 403.
+
+                            * `fx_client_no_access`: The client is authenticated but
+                            not authorized.
+
+                            '
+                          enum:
+                          - fx_client_no_access
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '404':
+          description: Error response when the requested resource cannot be found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 404.
+
+                            * `fx_quote_not_found`: The provided quote cannot be found
+                            in the service.
+
+                            * `fx_fee_configuration_not_found`: The configuration
+                            cannot be found for at least one of the fees.
+
+                            '
+                          enum:
+                          - fx_quote_not_found
+                          - fx_fee_configuration_not_found
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '500':
+          description: Error response when service has internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 500.
+
+                            * `fx_dependency_error`: Error happens when the service
+                            calls its dependencies.
+
+                            * `fx_uncategorized_error`: Service errors not categorized.
+
+                            '
+                          enum:
+                          - fx_dependency_error
+                          - fx_uncategorized_error
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+      deprecated: false
+      x-info:
+        apiType: external
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/conversions:
+    post:
+      tags:
+      - Conversions
+      summary: Create Conversion
+      description: This API allows you to convert the balance from one currency to
+        another within the same customer wallet either at the current market rate
+        or using a previous exchange rate quote. This API allows you to select a settlement
+        schedule for the conversion.
+      operationId: createConversion
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique identifier of the client.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: customerHashId
+        in: path
+        description: Unique identifier of the customer.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: walletHashId
+        in: path
+        description: Unique identifier of the wallet.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      requestBody:
+        description: ConversionCreationRequest
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerComment:
+                  maxLength: 512
+                  type: string
+                  description: Free text comment for clients to record and track the
+                    conversion.
+                  example: Converting SGD to INR during Travel.
+            examples:
+              With_QuoteId_And_Source_Amount:
+                value:
+                  quoteId: quote_6WRfj2CkYaRSuiPskK3kj3
+                  sourceAmount: 100
+                  customerComment: Converting USD to SGD
+                summary: With Quote Id and Source Amount
+              With_QuoteId_And_Destination_Amount:
+                value:
+                  quoteId: quote_6WRfj2CkYaRSuiPskK3kj3
+                  customerComment: Converting USD to SGD
+                  destinationAmount: 100
+                summary: With Quote Id and Destination Amount
+              With_Currency_Pair_And_Source_Amount:
+                value:
+                  sourceAmount: 100
+                  customerComment: Converting USD to SGD
+                  sourceCurrencyCode: USD
+                  destinationCurrencyCode: SGD
+                summary: With Currency Pair and Source Amount
+              With_Currency_Pair_And_Destination_Amount:
+                value:
+                  customerComment: Converting USD to SGD
+                  destinationAmount: 100
+                  sourceCurrencyCode: USD
+                  destinationCurrencyCode: SGD
+                summary: With Currency Pair and Destination Amount
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: ConversionCreationResponse
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the conversion.
+                    example: conversion_1234567890abcdefABCDEF
+                  status:
+                    title: ConversionStatus
+                    type: string
+                    description: The status of the conversion.
+                    enum:
+                    - created
+                    - processing
+                    - completed
+                    - cancelled
+                    - failed
+                    - pending_cancellation
+                  conversionTime:
+                    type: string
+                    description: Scheduled settlement time in UTC. This is significant
+                      for future-dated conversions (e.g., nextDay, 2days). Ensure
+                      sufficient funds in the customer's wallet before this time to
+                      avoid cancellation and related charges.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  sourceCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the source amount.
+                    example: USD
+                  destinationCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the destination amount.
+                    example: SGD
+                  sourceAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The source amount to be converted to the destination
+                      currency.
+                    format: double
+                    example: 13.42
+                  destinationAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The amount needed in the destination currency.
+                    format: double
+                    example: 13.42
+                  quoteId:
+                    type: string
+                    description: Unique identifier of the quote.
+                    example: quote_1234567890abcdefABCDEF
+                  netExchangeRate:
+                    type: number
+                    description: Exchange rate with markup to be used for the conversion.
+                    format: double
+                    example: 1.342255231
+                  exchangeRate:
+                    type: number
+                    description: Foreign exchange market rate for the currency pair,
+                      used as the benchmark for quote calculation.
+                    format: double
+                    example: 1.349324513
+                  markupRate:
+                    type: number
+                    description: Markup rate applied to the exchange rate for the
+                      conversion by Nium.
+                    format: double
+                    example: 0.006745677
+                  destinationMarkupAmount:
+                    type: number
+                    description: The amount charged in the destination currency as
+                      the markup for the conversion.
+                    format: double
+                    example: 0.07
+                  systemReferenceNumber:
+                    type: string
+                    description: Unique identifier for wallet financial activities
+                      used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions)
+                      for details.
+                    example: WFT1234567890
+                  customerComment:
+                    maxLength: 512
+                    type: string
+                    description: Free text comment for clients to record and track
+                      the conversion.
+                    example: Converting SGD to INR during Travel.
+                  cancellationFee:
+                    type: number
+                    description: The fee charged when executing the cancellation.
+                    format: double
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationFeeCurrencyCode:
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the cancellation fee.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationReason:
+                    title: CancellationReason
+                    type: string
+                    description: "Reason for a conversion cancellation. \n  * `user_cancel`:\
+                      \ User initiated cancellation.\n  * `insufficient_fund`: Cancellation\
+                      \ due to insufficient balance in the wallet at the time of conversion\
+                      \ execution.\n"
+                    enum:
+                    - user_cancel
+                    - insufficient_fund
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationComment:
+                    maxLength: 512
+                    type: string
+                    description: Free text comment for clients to record and track
+                      cancellation of the conversion.
+                    example: Cancelling due to change of plans.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationFeeSystemReferenceNumber:
+                    type: string
+                    description: Unique identifier for wallet financial activities
+                      used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions)
+                      for details.
+                    example: 1234567890F
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  createdTime:
+                    type: string
+                    description: Time of creation in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  updatedTime:
+                    type: string
+                    description: Time of update in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+              examples:
+                With_QuoteId:
+                  value:
+                    id: conversion_4UTXo2tQnThdZGrMz6FdQR
+                    status: processing
+                    quoteId: quote_6WRfj2CkYaRSuiPskK3kj3
+                    markupRate: 0.0120348
+                    createdTime: '2023-06-16 05:22:14'
+                    updatedTime: '2023-06-16 05:22:14'
+                    exchangeRate: 1.3372
+                    sourceAmount: 100
+                    conversionTime: '2023-06-16 05:22:14'
+                    netExchangeRate: 1.3251652
+                    customerComments: Converting USD to SGD
+                    destinationAmount: 132.52
+                    sourceCurrencyCode: USD
+                    systemReferenceNumber: WFT9188961163
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 1.2
+                  summary: With Quote Id
+                With_CurrencyPair:
+                  value:
+                    id: conversion_37Fom6qCpA6J0nUZh8MaJg
+                    status: processing
+                    quoteId: quote_4z3gDQho4IXp9CBJoocrTu
+                    markupRate: 0.0120348
+                    createdTime: '2023-06-16 05:22:14'
+                    updatedTime: '2023-06-16 05:22:14'
+                    exchangeRate: 1.3372
+                    sourceAmount: 100
+                    conversionTime: '2023-06-16 05:22:14'
+                    netExchangeRate: 1.3251652
+                    customerComments: Converting USD to SGD
+                    destinationAmount: 132.52
+                    sourceCurrencyCode: USD
+                    systemReferenceNumber: WFT9420624396
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 1.2
+                  summary: With Currency Pair
+        '400':
+          description: Error response when the request format is invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 400.
+
+
+                            * `fx_constraint_violated_input`: The input violates the
+                            model constraints.
+
+                            * `fx_invalid_format_input`: The input format is invalid.
+
+                            * `fx_invalid_currency_code`: The input currency code
+                            is invalid.
+
+                            * `fx_invalid_currency_amount`: The input currency amount
+                            is invalid.
+
+                            * `fx_missing_input`: The required fields are missing.
+
+                            * `fx_quote_expired`: The provided quote is expired.
+
+                            * `fx_insufficient_balance`: The balance in the account
+                            is insufficient to complete/schedule the transfer.
+
+                            * `fx_transfer_status_invalid`: The transfer status is
+                            invalid.
+
+                            * `fx_locked_period`: The requested conversion is in locked
+                            period.
+
+                            '
+                          enum:
+                          - fx_constraint_violated_input
+                          - fx_invalid_format_input
+                          - fx_invalid_currency_code
+                          - fx_invalid_currency_amount
+                          - fx_missing_input
+                          - fx_quote_expired
+                          - fx_insufficient_balance
+                          - fx_transfer_status_invalid
+                          - fx_locked_period
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '401':
+          description: Error response when the request is unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 401.
+
+                            * `fx_client_unauthenticated`: The client request lacks
+                            valid authentication credentials.
+
+                            '
+                          enum:
+                          - fx_client_unauthenticated
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '403':
+          description: Error response when the requested resource is forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 403.
+
+                            * `fx_client_no_access`: The client is authenticated but
+                            not authorized.
+
+                            '
+                          enum:
+                          - fx_client_no_access
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '404':
+          description: Error response when the requested resource cannot be found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 404.
+
+                            * `fx_quote_not_found`: The provided quote cannot be found
+                            in the service.
+
+                            * `fx_fee_configuration_not_found`: The configuration
+                            cannot be found for at least one of the fees.
+
+                            '
+                          enum:
+                          - fx_quote_not_found
+                          - fx_fee_configuration_not_found
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '500':
+          description: Error response when service has internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 500.
+
+                            * `fx_dependency_error`: Error happens when the service
+                            calls its dependencies.
+
+                            * `fx_uncategorized_error`: Service errors not categorized.
+
+                            '
+                          enum:
+                          - fx_dependency_error
+                          - fx_uncategorized_error
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+      deprecated: false
+      x-info:
+        apiType: external
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      x-codegen-request-body-name: ConversionCreationRequest
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/conversions/{conversionId}:
+    get:
+      tags:
+      - Conversions
+      summary: Fetch Conversion by id
+      description: This API will retrieve an existing conversion with the conversionId.
+      operationId: fetchConversion
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique identifier of the client.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: customerHashId
+        in: path
+        description: Unique identifier of the customer.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: walletHashId
+        in: path
+        description: Unique identifier of the wallet.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: conversionId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: Unique identifier of the conversion.
+          example: conversion_1234567890abcdefABCDEF
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: ConversionCreationResponse
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the conversion.
+                    example: conversion_1234567890abcdefABCDEF
+                  status:
+                    title: ConversionStatus
+                    type: string
+                    description: The status of the conversion.
+                    enum:
+                    - created
+                    - processing
+                    - completed
+                    - cancelled
+                    - failed
+                    - pending_cancellation
+                  conversionTime:
+                    type: string
+                    description: Scheduled settlement time in UTC. This is significant
+                      for future-dated conversions (e.g., nextDay, 2days). Ensure
+                      sufficient funds in the customer's wallet before this time to
+                      avoid cancellation and related charges.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  sourceCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the source amount.
+                    example: USD
+                  destinationCurrencyCode:
+                    maxLength: 3
+                    minLength: 3
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the destination amount.
+                    example: SGD
+                  sourceAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The source amount to be converted to the destination
+                      currency.
+                    format: double
+                    example: 13.42
+                  destinationAmount:
+                    minimum: 0
+                    exclusiveMinimum: true
+                    type: number
+                    description: The amount needed in the destination currency.
+                    format: double
+                    example: 13.42
+                  quoteId:
+                    type: string
+                    description: Unique identifier of the quote.
+                    example: quote_1234567890abcdefABCDEF
+                  netExchangeRate:
+                    type: number
+                    description: Exchange rate with markup to be used for the conversion.
+                    format: double
+                    example: 1.342255231
+                  exchangeRate:
+                    type: number
+                    description: Foreign exchange market rate for the currency pair,
+                      used as the benchmark for quote calculation.
+                    format: double
+                    example: 1.349324513
+                  markupRate:
+                    type: number
+                    description: Markup rate applied to the exchange rate for the
+                      conversion by Nium.
+                    format: double
+                    example: 0.006745677
+                  destinationMarkupAmount:
+                    type: number
+                    description: The amount charged in the destination currency as
+                      the markup for the conversion.
+                    format: double
+                    example: 0.07
+                  systemReferenceNumber:
+                    type: string
+                    description: Unique identifier for wallet financial activities
+                      used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions)
+                      for details.
+                    example: WFT1234567890
+                  customerComment:
+                    maxLength: 512
+                    type: string
+                    description: Free text comment for clients to record and track
+                      the conversion.
+                    example: Converting SGD to INR during Travel.
+                  cancellationFee:
+                    type: number
+                    description: The fee charged when executing the cancellation.
+                    format: double
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationFeeCurrencyCode:
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the cancellation fee.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationReason:
+                    title: CancellationReason
+                    type: string
+                    description: "Reason for a conversion cancellation. \n  * `user_cancel`:\
+                      \ User initiated cancellation.\n  * `insufficient_fund`: Cancellation\
+                      \ due to insufficient balance in the wallet at the time of conversion\
+                      \ execution.\n"
+                    enum:
+                    - user_cancel
+                    - insufficient_fund
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationComment:
+                    maxLength: 512
+                    type: string
+                    description: Free text comment for clients to record and track
+                      cancellation of the conversion.
+                    example: Cancelling due to change of plans.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationFeeSystemReferenceNumber:
+                    type: string
+                    description: Unique identifier for wallet financial activities
+                      used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions)
+                      for details.
+                    example: 1234567890F
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  createdTime:
+                    type: string
+                    description: Time of creation in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+                  updatedTime:
+                    type: string
+                    description: Time of update in UTC.
+                    format: date-time
+                    example: '2021-03-09T06:46:03.000Z'
+              examples:
+                created_conversion:
+                  value:
+                    id: conversion_37Fom6qCpA6J0nUZh8MaJg
+                    status: created
+                    quoteId: quote_4z3gDQho4IXp9CBJoocrTu
+                    markupRate: 0.0120348
+                    createdTime: '2023-06-16 05:22:14'
+                    updatedTime: '2023-06-16 05:22:14'
+                    exchangeRate: 1.3372
+                    sourceAmount: 100
+                    conversionTime: '2023-06-16 05:22:14'
+                    netExchangeRate: 1.3251652
+                    customerComments: Converting USD to SGD
+                    destinationAmount: 132.52
+                    sourceCurrencyCode: USD
+                    systemReferenceNumber: WFT9420624396
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 1.2
+                  summary: created_conversion
+                cancelled_conversion:
+                  value:
+                    id: conversion_37Fom6qCpA6J0nUZh8MaJg
+                    status: cancelled
+                    quoteId: quote_4z3gDQho4IXp9CBJoocrTu
+                    markupRate: 0.0120348
+                    createdTime: '2023-06-16 05:22:14'
+                    updatedTime: '2023-06-16 05:24:14'
+                    exchangeRate: 1.3372
+                    sourceAmount: 100
+                    conversionTime: '2023-06-22 01:00:00'
+                    cancellationFee: 5.28
+                    netExchangeRate: 1.3251652
+                    customerComments: Converting USD to SGD
+                    destinationAmount: 132.52
+                    cancellationReason: user_cancel
+                    sourceCurrencyCode: USD
+                    cancellationComment: Cancellation due to change of plan
+                    systemReferenceNumber: WFT9420624396
+                    destinationCurrencyCode: SGD
+                    destinationMarkupAmount: 1.2
+                    cancellationFeeCurrencyCode": USD
+                    cancellationFeeSystemReferenceNumber: 3064439572F
+                  summary: cancelled_conversion
+        '400':
+          description: Error response when the request format is invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 400.
+
+
+                            * `fx_constraint_violated_input`: The input violates the
+                            model constraints.
+
+                            * `fx_invalid_format_input`: The input format is invalid.
+
+                            * `fx_invalid_currency_code`: The input currency code
+                            is invalid.
+
+                            * `fx_invalid_currency_amount`: The input currency amount
+                            is invalid.
+
+                            * `fx_missing_input`: The required fields are missing.
+
+                            * `fx_quote_expired`: The provided quote is expired.
+
+                            * `fx_insufficient_balance`: The balance in the account
+                            is insufficient to complete/schedule the transfer.
+
+                            * `fx_transfer_status_invalid`: The transfer status is
+                            invalid.
+
+                            * `fx_locked_period`: The requested conversion is in locked
+                            period.
+
+                            '
+                          enum:
+                          - fx_constraint_violated_input
+                          - fx_invalid_format_input
+                          - fx_invalid_currency_code
+                          - fx_invalid_currency_amount
+                          - fx_missing_input
+                          - fx_quote_expired
+                          - fx_insufficient_balance
+                          - fx_transfer_status_invalid
+                          - fx_locked_period
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '401':
+          description: Error response when the request is unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 401.
+
+                            * `fx_client_unauthenticated`: The client request lacks
+                            valid authentication credentials.
+
+                            '
+                          enum:
+                          - fx_client_unauthenticated
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '403':
+          description: Error response when the requested resource is forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 403.
+
+                            * `fx_client_no_access`: The client is authenticated but
+                            not authorized.
+
+                            '
+                          enum:
+                          - fx_client_no_access
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '404':
+          description: Error response when the requested resource cannot be found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 404.
+
+                            * `fx_quote_not_found`: The provided quote cannot be found
+                            in the service.
+
+                            * `fx_fee_configuration_not_found`: The configuration
+                            cannot be found for at least one of the fees.
+
+                            '
+                          enum:
+                          - fx_quote_not_found
+                          - fx_fee_configuration_not_found
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '500':
+          description: Error response when service has internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 500.
+
+                            * `fx_dependency_error`: Error happens when the service
+                            calls its dependencies.
+
+                            * `fx_uncategorized_error`: Service errors not categorized.
+
+                            '
+                          enum:
+                          - fx_dependency_error
+                          - fx_uncategorized_error
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+      deprecated: false
+      x-info:
+        apiType: external
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/conversions/{conversionId}/cancel:
+    post:
+      tags:
+      - Conversions
+      summary: Cancel Conversion
+      description: This API allows you to cancel a conversion prior to the execution
+        time.
+      operationId: cancelConversion
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique identifier of the client.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: customerHashId
+        in: path
+        description: Unique identifier of the customer.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: walletHashId
+        in: path
+        description: Unique identifier of the wallet.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+          example: abc12345-5d6e-0a8b-c8d7-3a7706a0c312
+      - name: conversionId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          description: Unique identifier of the conversion.
+          example: conversion_1234567890abcdefABCDEF
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      requestBody:
+        description: ConversionCancelRequest
+        content:
+          application/json:
+            schema:
+              title: ConversionCancelRequest
+              type: object
+              properties:
+                cancellationComment:
+                  maxLength: 512
+                  type: string
+                  description: Free text comment for clients to record and track cancellation
+                    of the conversion.
+                  example: Cancelling due to change of plans.
+            example:
+              cancellationComment: Cancellation due to change of plan
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: ConversionCancelResponse
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique identifier of the conversion.
+                    example: conversion_1234567890abcdefABCDEF
+                  status:
+                    title: ConversionStatus
+                    type: string
+                    description: The status of the conversion.
+                    enum:
+                    - created
+                    - processing
+                    - completed
+                    - cancelled
+                    - failed
+                    - pending_cancellation
+                  systemReferenceNumber:
+                    type: string
+                    description: Unique identifier for wallet financial activities
+                      used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions)
+                      for details.
+                    example: WFT1234567890
+                  cancellationFee:
+                    type: number
+                    description: The fee charged when executing the cancellation.
+                    format: double
+                  cancellationFeeCurrencyCode:
+                    type: string
+                    description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+                      for the cancellation fee.
+                  cancellationComment:
+                    maxLength: 512
+                    type: string
+                    description: Free text comment for clients to record and track
+                      cancellation of the conversion.
+                    example: Cancelling due to change of plans.
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+                  cancellationFeeSystemReferenceNumber:
+                    type: string
+                    description: Unique identifier for wallet financial activities
+                      used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions)
+                      for details.
+                    example: 1234567890F
+                  cancellationReason:
+                    title: CancellationReason
+                    type: string
+                    description: "Reason for a conversion cancellation. \n  * `user_cancel`:\
+                      \ User initiated cancellation.\n  * `insufficient_fund`: Cancellation\
+                      \ due to insufficient balance in the wallet at the time of conversion\
+                      \ execution.\n"
+                    enum:
+                    - user_cancel
+                    - insufficient_fund
+                    x-field-extra-annotation: '@JsonInclude(JsonInclude.Include.NON_NULL)'
+              example:
+                id: conversion_1234567890abcdefABCDEF
+                status: created
+                cancellationFee: 0.53
+                cancellationReason: user_cancel
+                cancellationComment: Cancelling due to change of plans.
+                systemReferenceNumber: WFT1234567890
+                cancellationFeeCurrencyCode: string
+                cancellationFeeSystemReferenceNumber: 1234567890F
+        '400':
+          description: Error response when the request format is invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 400.
+
+
+                            * `fx_constraint_violated_input`: The input violates the
+                            model constraints.
+
+                            * `fx_invalid_format_input`: The input format is invalid.
+
+                            * `fx_invalid_currency_code`: The input currency code
+                            is invalid.
+
+                            * `fx_invalid_currency_amount`: The input currency amount
+                            is invalid.
+
+                            * `fx_missing_input`: The required fields are missing.
+
+                            * `fx_quote_expired`: The provided quote is expired.
+
+                            * `fx_insufficient_balance`: The balance in the account
+                            is insufficient to complete/schedule the transfer.
+
+                            * `fx_transfer_status_invalid`: The transfer status is
+                            invalid.
+
+                            * `fx_locked_period`: The requested conversion is in locked
+                            period.
+
+                            '
+                          enum:
+                          - fx_constraint_violated_input
+                          - fx_invalid_format_input
+                          - fx_invalid_currency_code
+                          - fx_invalid_currency_amount
+                          - fx_missing_input
+                          - fx_quote_expired
+                          - fx_insufficient_balance
+                          - fx_transfer_status_invalid
+                          - fx_locked_period
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '401':
+          description: Error response when the request is unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 401.
+
+                            * `fx_client_unauthenticated`: The client request lacks
+                            valid authentication credentials.
+
+                            '
+                          enum:
+                          - fx_client_unauthenticated
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '403':
+          description: Error response when the requested resource is forbidden.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 403.
+
+                            * `fx_client_no_access`: The client is authenticated but
+                            not authorized.
+
+                            '
+                          enum:
+                          - fx_client_no_access
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '404':
+          description: Error response when the requested resource cannot be found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 404.
+
+                            * `fx_quote_not_found`: The provided quote cannot be found
+                            in the service.
+
+                            * `fx_fee_configuration_not_found`: The configuration
+                            cannot be found for at least one of the fees.
+
+                            '
+                          enum:
+                          - fx_quote_not_found
+                          - fx_fee_configuration_not_found
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+        '500':
+          description: Error response when service has internal error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDetails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: 'The detailed error code associated with HTTP
+                            status 500.
+
+                            * `fx_dependency_error`: Error happens when the service
+                            calls its dependencies.
+
+                            * `fx_uncategorized_error`: Service errors not categorized.
+
+                            '
+                          enum:
+                          - fx_dependency_error
+                          - fx_uncategorized_error
+                        description:
+                          type: string
+                          description: Description of the error.
+                      description: error details description
+      deprecated: false
+      x-info:
+        apiType: external
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      x-codegen-request-body-name: ConversionCancelRequest
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/exchangeRate:
+    get:
+      tags:
+      - Quotes (Previous Version)
+      summary: Exchange Rate With Markup
+      description: This API fetches the exchange rate between source currency and
+        destination currency. If either source or destination amount is provided,
+        the equivalent amount will also be returned. Note that you may not send both
+        sourceAmount and destinationAmount as query parameters together. If both are
+        provided, sourceAmount shall be taken for conversion.
+      operationId: exchangeRateWithMarkup
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique customer identifier generated on customer creation.
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 36
+          type: string
+        example: '{{clientHashId}}'
+      - name: sourceCurrencyCode
+        in: query
+        description: This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+          for the source amount.
+        required: true
+        schema:
+          maxLength: 3
+          minLength: 3
+          type: string
+      - name: destinationCurrencyCode
+        in: query
+        description: This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+          for the destination amount.
+        required: true
+        schema:
+          maxLength: 3
+          minLength: 3
+          type: string
+      - name: sourceAmount
+        in: query
+        description: An amount to be converted. This field takes precedence over destinationAmount,
+          in case both are provided.
+        required: false
+        schema:
+          type: number
+          format: double
+      - name: destinationAmount
+        in: query
+        description: An amount to which the source is converted. It can be used to
+          find the necessary source amount value. If both sourceAmount and destinationAmount
+          are provided, this field is ignored.
+        required: false
+        schema:
+          type: number
+          format: double
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: ExchangeRateV2ResponseDto
+                type: object
+                properties:
+                  destinationAmount:
+                    type: number
+                    description: The credited amount.
+                    format: double
+                    example: 13.42
+                  destinationCurrencyCode:
+                    type: string
+                    description: This field contains the 3-letter [ISO-4217 currency
+                      code](https://www.iso.org/iso-4217-currency-codes.html) for
+                      the destination amount.
+                    example: SGD
+                  ecbFxRate:
+                    type: number
+                    description: 'The ecb exchange rate fetched for the conversion.
+
+                      This field is only applicable for EU and UK.'
+                    format: double
+                    example: 1.349
+                  exchangeRate:
+                    type: number
+                    description: The exchange rate fetched for the conversion.
+                    format: double
+                    example: 1.349
+                  expiryDate:
+                    type: string
+                    description: Timestamp till which the quoted rate is valid. The
+                      timezone is UTC +00.
+                    example: '2021-03-09T06:46:03.000Z'
+                  markupAmount:
+                    type: number
+                    description: In case source or destination amount is provided
+                      the markup amount will be calculated using markupRate.
+                    format: double
+                    example: 0.07
+                  markupRate:
+                    type: number
+                    description: This is the markup rate charged by NIUM.
+                    format: double
+                    example: 0.006745
+                  netExchangeRate:
+                    type: number
+                    description: This is exchangeRate subtracted by the markupRate.
+                    format: double
+                    example: 1.342255
+                  quoteId:
+                    type: string
+                    description: Unique quote Id for the exchange rate.
+                    example: f3632302-1d41-4a40-b7a0-4c456dddbd9e
+                  scalingFactor:
+                    type: integer
+                    description: The netExchangeRate should be divided by the scaling
+                      factor to fetch the actual exchange rate.
+                    format: int32
+                    example: 1
+                  sourceAmount:
+                    type: number
+                    description: An amount to be converted.
+                    format: double
+                    example: 10
+                  sourceCurrencyCode:
+                    type: string
+                    description: This field contains the 3-letter [ISO-4217 currency
+                      code](https://www.iso.org/iso-4217-currency-codes.html) for
+                      the source amount.
+                    example: USD
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      x-info:
+        apiType: external
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      security:
+      - default: []
+  /api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/lockExchangeRate:
+    get:
+      parameters:
+      - allowEmptyValue: false
+        description: This field is used if client wants to apply additional Fxmarkup
+          in the exchange rate for their customer. The value should be in percentage.
+          For example use 0.10 for 0.1% additional markup.
+        in: query
+        name: additionalFxMarkup
+        required: false
+        schema:
+          default: 0
+          format: double
+          type: number
+      - description: Unique client identifier generated and shared before API handshake.
+        in: path
+        name: clientHashId
+        required: true
+        schema:
+          type: string
+          example: '{{clientHashId}}'
+      - description: Unique customer identifier generated on customer creation.
+        in: path
+        name: customerHashId
+        required: true
+        schema:
+          type: string
+      - allowEmptyValue: false
+        description: This field contains the [3-letter ISO-4217 currency code](doc:currency-and-country-codes)
+          for the destination amount.
+        in: query
+        name: destinationCurrency
+        required: true
+        schema:
+          type: string
+      - allowEmptyValue: false
+        description: This field contains the [3-letter ISO-4217 currency code](doc:currency-and-country-codes)
+          for the source amount.
+        in: query
+        name: sourceCurrency
+        required: true
+        schema:
+          type: string
+      - description: Unique wallet identifier generated simultaneously with customer
+          creation.
+        in: path
+        name: walletHashId
+        required: true
+        schema:
+          type: string
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FxHoldLockResponseContent'
+          description: OK
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletApiError'
+          description: BadRequest
+        '401':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        '403':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Forbidden
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletApiError'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletApiError'
+          description: Internal Server Error
+      tags:
+      - Quotes (Previous Version)
+      deprecated: false
+      description: This API allows you to fetch exchange rate, and lock and hold the
+        rates till a certain amount of time.
+      operationId: ExchangeRateLockandHold
+      summary: Exchange Rate Lock and Hold
+      x-info:
+        apiType: external
+      security:
+      - default: []
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+  /api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/transfer:
+    post:
+      tags:
+      - Conversions (Previous Version)
+      summary: Balance Transfer within Wallet
+      description: This API allows you to transfer the balance from one currency to
+        another within the same customer wallet.
+      operationId: balanceTransferwithinWallet
+      parameters:
+      - name: clientHashId
+        in: path
+        description: Unique client identifier generated and shared before API handshake.
+        required: true
+        schema:
+          type: string
+        example: '{{clientHashId}}'
+      - name: customerHashId
+        in: path
+        description: Unique customer identifier generated on customer creation.
+        required: true
+        schema:
+          type: string
+      - name: walletHashId
+        in: path
+        description: Unique wallet identifier generated simultaneously with customer
+          creation.
+        required: true
+        schema:
+          type: string
+      - description: Enter a unique UUID value
+        in: header
+        name: x-request-id
+        schema:
+          type: string
+          example: '{{$guid}}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: WalletTransferDto
+              required:
+              - destinationCurrency
+              - sourceCurrency
+              type: object
+              properties:
+                amount:
+                  type: number
+                  description: This field is the amount in source currency which is
+                    to be transferred. If destinationAmount is provided, it will take
+                    preference over this field.
+                  format: double
+                  example: 10
+                customerComments:
+                  maxLength: 512
+                  type: string
+                  description: 'This field accepts customer comments for the balance
+                    transfer within wallet.
+
+                    Maximum character limit is 512.'
+                  example: Changed SGD to INR during Travel
+                destinationAmount:
+                  type: number
+                  description: This field is the amount in destination currency which
+                    is to be transferred. If provided, amount field is not considered.
+                    If this field is skipped, amount is considered in source currency.
+                  format: double
+                  example: 20
+                destinationCurrency:
+                  maxLength: 3
+                  minLength: 3
+                  type: string
+                  description: This field accepts the 3-letter [ISO-4217 currency
+                    code](https://www.iso.org/iso-4217-currency-codes.html) for the
+                    destination amount.
+                  example: INR
+                quoteId:
+                  type: string
+                  example: UUID
+                sourceCurrency:
+                  maxLength: 3
+                  minLength: 3
+                  type: string
+                  description: This field accepts the 3-letter [ISO-4217 currency
+                    code](https://www.iso.org/iso-4217-currency-codes.html) for the
+                    source amount.
+                  example: SGD
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                title: WalletTransferResponseDto
+                type: object
+                properties:
+                  destinationAmount:
+                    type: number
+                    description: Destination amount is the actual amount credited
+                      after deducting Fx and markup.
+                    format: double
+                    example: 549.07
+                  destinationCurrencyCode:
+                    type: string
+                    description: This field contains the 3-letter [ISO-4217 currency
+                      code](https://www.iso.org/iso-4217-currency-codes.html) for
+                      the destination amount.
+                    example: INR
+                  exchangeRate:
+                    type: number
+                    description: Exchange rate between source and destination currencies.
+                    format: double
+                    example: 54.934
+                  markupAmount:
+                    type: number
+                    description: Markup amount calculated on the transaction.
+                    format: double
+                    example: 0.27
+                  markupRate:
+                    type: number
+                    description: Cross-currency markup percentage levied by NIUM.
+                    format: double
+                    example: 0.027467
+                  netExchangeRate:
+                    type: number
+                    description: Exchange rate between source and destination currencies
+                      derived after accounting for markup. The netExchangeRate should
+                      be divided by the scaling factor to fetch the actual exchange
+                      rate.
+                    format: double
+                    example: 54.906533
+                  scalingFactor:
+                    type: integer
+                    description: The netExchangeRate should be divided by the scaling
+                      factor to fetch the actual exchange rate.
+                    format: int32
+                    example: 1
+                  sourceAmount:
+                    type: number
+                    description: Source amount is the amount transferred by the customer.
+                    format: double
+                    example: 10
+                  sourceCurrencyCode:
+                    type: string
+                    description: This field contains the 3-letter [ISO-4217 currency
+                      code](https://www.iso.org/iso-4217-currency-codes.html) for
+                      the source amount.
+                    example: SGD
+                  systemReferenceNumber:
+                    type: string
+                    description: Unique auth code generated for the transaction by
+                      the card issuance platform.
+                    example: CP2919853847
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      x-info:
+        apiType: external
+      x-wso2-application-security:
+        optional: false
+        security-types: api_key
+      security:
+      - default: []
+components:
+  schemas:
+    WalletApiError:
+      properties:
+        errors:
+          description: List of errors occurred.
+          example:
+          - field1 is not valid
+          - field2 is not valid
+          items:
+            type: string
+          type: array
+        message:
+          description: Error message descriptor.
+          example: Error message descriptor.
+          type: string
+        status:
+          description: 'HttpStatus of the request : BAD_REQUEST, INTERNAL_SERVER_ERROR.'
+          enum:
+          - 100 CONTINUE
+          - 101 SWITCHING_PROTOCOLS
+          - 102 PROCESSING
+          - 103 CHECKPOINT
+          - 200 OK
+          - 201 CREATED
+          - 202 ACCEPTED
+          - 203 NON_AUTHORITATIVE_INFORMATION
+          - 204 NO_CONTENT
+          - 205 RESET_CONTENT
+          - 206 PARTIAL_CONTENT
+          - 207 MULTI_STATUS
+          - 208 ALREADY_REPORTED
+          - 226 IM_USED
+          - 300 MULTIPLE_CHOICES
+          - 301 MOVED_PERMANENTLY
+          - 302 FOUND
+          - 302 MOVED_TEMPORARILY
+          - 303 SEE_OTHER
+          - 304 NOT_MODIFIED
+          - 305 USE_PROXY
+          - 307 TEMPORARY_REDIRECT
+          - 308 PERMANENT_REDIRECT
+          - 400 BAD_REQUEST
+          - 401 UNAUTHORIZED
+          - 402 PAYMENT_REQUIRED
+          - 403 FORBIDDEN
+          - 404 NOT_FOUND
+          - 405 METHOD_NOT_ALLOWED
+          - 406 NOT_ACCEPTABLE
+          - 407 PROXY_AUTHENTICATION_REQUIRED
+          - 408 REQUEST_TIMEOUT
+          - 409 CONFLICT
+          - 410 GONE
+          - 411 LENGTH_REQUIRED
+          - 412 PRECONDITION_FAILED
+          - 413 PAYLOAD_TOO_LARGE
+          - 413 REQUEST_ENTITY_TOO_LARGE
+          - 414 URI_TOO_LONG
+          - 414 REQUEST_URI_TOO_LONG
+          - 415 UNSUPPORTED_MEDIA_TYPE
+          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+          - 417 EXPECTATION_FAILED
+          - 418 I_AM_A_TEAPOT
+          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+          - 420 METHOD_FAILURE
+          - 421 DESTINATION_LOCKED
+          - 422 UNPROCESSABLE_ENTITY
+          - 423 LOCKED
+          - 424 FAILED_DEPENDENCY
+          - 425 TOO_EARLY
+          - 426 UPGRADE_REQUIRED
+          - 428 PRECONDITION_REQUIRED
+          - 429 TOO_MANY_REQUESTS
+          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+          - 500 INTERNAL_SERVER_ERROR
+          - 501 NOT_IMPLEMENTED
+          - 502 BAD_GATEWAY
+          - 503 SERVICE_UNAVAILABLE
+          - 504 GATEWAY_TIMEOUT
+          - 505 HTTP_VERSION_NOT_SUPPORTED
+          - 506 VARIANT_ALSO_NEGOTIATES
+          - 507 INSUFFICIENT_STORAGE
+          - 508 LOOP_DETECTED
+          - 509 BANDWIDTH_LIMIT_EXCEEDED
+          - 510 NOT_EXTENDED
+          - 511 NETWORK_AUTHENTICATION_REQUIRED
+          example: BAD_REQUEST
+          type: string
+      title: ApiError
+      type: object
+    FxHoldLockResponseContent:
+      properties:
+        additionalFxMarkup:
+          description: This field contains the Additional Fx Markup of the given audit
+            ID
+          example: '0.2'
+          type: string
+        audit_id:
+          description: This field contains the audit ID which is generated by NIUM
+            as a unique number for internal purpose.
+          example: 112
+          format: int64
+          type: integer
+        destination_currency:
+          description: This field contains the 3-letter [ISO-4217 destination currency
+            code](doc:currency-and-country-codes) for the destination amount.
+          example: INR
+          type: string
+        ecb_fx_rate:
+          description: This field contains the ECB exchange rate.
+          example: '0.0'
+          type: string
+        fx_hold_id:
+          description: This field contains the foreign exchange hold ID.
+          example: 472e130b-ed14-4829-9e6d-81a9d8dce72e
+          type: string
+        fx_rate:
+          description: This field contains the real time FX provider rate.
+          example: '74.719'
+          type: string
+        hold_expiry_at:
+          description: This field contains the timestamp till which the exchange rate
+            will be valid. In other words, the timestamp at which the exchange rate
+            held by NIUM shall expire. Format of this field is yyyy-MM-ddTHH:mm:ss.SSSZ.
+          example: '2021-07-02T10:43:00.514Z'
+          type: string
+        markup_rate:
+          description: This field contains the markup rate charged by NIUM.
+          example: '0.0'
+          type: string
+        source_currency:
+          description: This field contains the 3-letter [ISO-4217 source currency
+            code](doc:currency-and-country-codes) for the source amount.
+          example: USD
+          type: string
+        status:
+          description: This field contains the status of the given audit ID
+          example: ACTIVE
+          type: string
+      title: Fx hold lock response content
+      type: object
+    ExchangeRateGetResponse:
+      title: ExchangeRateGetResponse
+      properties:
+        average:
+          type: number
+          format: double
+          example: 1.634793477
+        min:
+          type: number
+          format: double
+          example: 1.625575716
+        max:
+          type: number
+          format: double
+          example: 1.689794369
+        time:
+          type: string
+          format: date-time
+          example: '2022-03-15T06:00:00.000Z'
+    ExchangeRatesGetResponse:
+      title: ExchangeRatesGetResponse
+      properties:
+        sourceCurrencyCode:
+          $ref: '#/components/schemas/SCC'
+        destinationCurrencyCode:
+          $ref: '#/components/schemas/DCC'
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        window:
+          $ref: '#/components/schemas/Window'
+        exchangeRates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExchangeRateGetResponse'
+    SCC:
+      type: string
+      example: USD
+      maxLength: 3
+      minLength: 3
+      description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+        for the source amount.
+    DCC:
+      type: string
+      example: SGD
+      maxLength: 3
+      minLength: 3
+      description: 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html)
+        for the destination amount.
+    Window:
+      title: Window
+      description: Specifies the field by which the results should be grouped.
+      enum:
+      - 1_day
+      - 1_hour
+      default: 1_day
+    ErrorCodes400:
+      type: string
+      description: 'The detailed error code associated with HTTP status 400.
+
+
+        * `fx_constraint_violated_input`: The input violates the model constraints.
+
+        * `fx_invalid_format_input`: The input format is invalid.
+
+        * `fx_invalid_currency_code`: The input currency code is invalid.
+
+        * `fx_missing_input`: The required fields are missing.
+
+        * `fx_date_range_invalid`: The date range should be within 90 days.
+
+        '
+      enum:
+      - fx_constraint_violated_input
+      - fx_invalid_format_input
+      - fx_invalid_currency_code
+      - fx_missing_input
+      - fx_date_range_invalid
+    ErrorCodes401:
+      type: string
+      description: 'The detailed error code associated with HTTP status 401.
+
+        * `fx_client_unauthenticated`: The client request lacks valid authentication
+        credentials.
+
+        '
+      enum:
+      - fx_client_unauthenticated
+    ErrorCodes403:
+      type: string
+      description: 'The detailed error code associated with HTTP status 403.
+
+        * `fx_client_no_access`: The client is authenticated but not authorized.
+
+        '
+      enum:
+      - fx_client_no_access
+    ErrorCodes500:
+      type: string
+      description: 'The detailed error code associated with HTTP status 500.
+
+        * `fx_dependency_error`: Error happens when the service calls its dependencies.
+
+        * `fx_uncategorized_error`: Service errors not categorized.
+
+        '
+      enum:
+      - fx_dependency_error
+      - fx_uncategorized_error
+    ErrorDetail400:
+      type: object
+      description: error details description
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCodes400'
+        description:
+          type: string
+          description: Description of the error.
+    ErrorDetail401:
+      type: object
+      description: error details description
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCodes401'
+        description:
+          type: string
+          description: Description of the error.
+    ErrorDetail403:
+      type: object
+      description: error details description
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCodes403'
+        description:
+          type: string
+          description: Description of the error.
+    ErrorDetail500:
+      type: object
+      description: error details description
+      properties:
+        code:
+          $ref: '#/components/schemas/ErrorCodes500'
+        description:
+          type: string
+          description: Description of the error.
+    ErrorResponse400:
+      type: object
+      properties:
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail400'
+    ErrorResponse401:
+      type: object
+      properties:
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail401'
+    ErrorResponse403:
+      type: object
+      properties:
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail403'
+    ErrorResponse500:
+      type: object
+      properties:
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail500'
+  responses:
+    BadRequest:
+      description: Error response when the request format is invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse400'
+    Unauthorized:
+      description: Error response when the request is unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse401'
+    Forbidden:
+      description: Error response when the requested resource is forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse403'
+    InternalError:
+      description: Error response when service has internal error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse500'
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      required: false
+      schema:
+        type: string
+      x-internal: true
+    CsrfToken:
+      name: csrf_token
+      in: header
+      required: false
+      schema:
+        type: string
+      x-internal: true
+    SCC_QueryParam:
+      name: sourceCurrencyCode
+      in: query
+      description: This field contains the 3-letter [currency-and-country-codes](https://docs.nium.com/apis/docs/currency-and-country-codes).
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCC'
+    DCC_QueryParam:
+      name: destinationCurrencyCode
+      in: query
+      description: This field contains the 3-letter [currency-and-country-codes](https://docs.nium.com/apis/docs/currency-and-country-codes).
+      required: true
+      schema:
+        $ref: '#/components/schemas/DCC'
+  securitySchemes:
+    default:
+      in: header
+      name: x-api-key
+      type: apiKey
+security:
+- default: []
