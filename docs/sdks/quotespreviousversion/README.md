@@ -24,10 +24,10 @@ s = nium_platform.NIUMPlatform()
 
 req = operations.ExchangeRateLockandHoldRequest(
     client_hash_id='{{clientHashId}}',
-    customer_hash_id='Automotive',
-    destination_currency='East',
-    source_currency='Lamborghini',
-    wallet_hash_id='hacking',
+    customer_hash_id='string',
+    destination_currency='string',
+    source_currency='string',
+    wallet_hash_id='string',
     x_request_id='{{$guid}}',
 )
 
@@ -64,9 +64,9 @@ from nium_platform.models import operations
 s = nium_platform.NIUMPlatform()
 
 req = operations.ExchangeRateWithMarkupRequest(
-    client_hash_id='virtual',
-    destination_currency_code='West',
-    source_currency_code='but',
+    client_hash_id='string',
+    destination_currency_code='string',
+    source_currency_code='string',
     x_request_id='{{$guid}}',
 )
 

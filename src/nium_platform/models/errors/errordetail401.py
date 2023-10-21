@@ -9,9 +9,8 @@ from typing import Optional
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class ErrorDetail401(Exception):
+class ErrorDetail401:
     r"""error details description"""
     code: Optional[errors_errorcodes401.ErrorCodes401] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 401.
@@ -21,5 +20,3 @@ class ErrorDetail401(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)

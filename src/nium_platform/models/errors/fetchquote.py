@@ -18,9 +18,8 @@ class FetchQuote500ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class FetchQuote500ApplicationJSONErrorDetails(Exception):
+class FetchQuote500ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[FetchQuote500ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 500.
@@ -31,8 +30,6 @@ class FetchQuote500ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -58,9 +55,8 @@ class FetchQuote404ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class FetchQuote404ApplicationJSONErrorDetails(Exception):
+class FetchQuote404ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[FetchQuote404ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 404.
@@ -71,8 +67,6 @@ class FetchQuote404ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -96,9 +90,8 @@ class FetchQuote403ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class FetchQuote403ApplicationJSONErrorDetails(Exception):
+class FetchQuote403ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[FetchQuote403ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 403.
@@ -108,8 +101,6 @@ class FetchQuote403ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -133,9 +124,8 @@ class FetchQuote401ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class FetchQuote401ApplicationJSONErrorDetails(Exception):
+class FetchQuote401ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[FetchQuote401ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 401.
@@ -145,8 +135,6 @@ class FetchQuote401ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -187,9 +175,8 @@ class FetchQuote400ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class FetchQuote400ApplicationJSONErrorDetails(Exception):
+class FetchQuote400ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[FetchQuote400ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 400.
@@ -208,8 +195,6 @@ class FetchQuote400ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)

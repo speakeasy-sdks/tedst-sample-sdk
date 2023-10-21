@@ -7,7 +7,7 @@
 </div>
 
 <!-- Start SDK Installation -->
-# SDK Installation
+## SDK Installation
 
 ```bash
 pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
@@ -16,8 +16,6 @@ pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
 
 ## SDK Example Usage
 <!-- Start SDK Example Usage -->
-
-
 ```python
 import nium_platform
 from nium_platform.models import operations
@@ -44,38 +42,36 @@ if res.conversion_cancel_response is not None:
 <!-- End SDK Example Usage -->
 
 <!-- Start SDK Available Operations -->
-# Available Resources and Operations
+## Available Resources and Operations
 
 
-## [conversions](docs/sdks/conversions/README.md)
+### [conversions](docs/sdks/conversions/README.md)
 
 * [cancel_conversion](docs/sdks/conversions/README.md#cancel_conversion) - Cancel Conversion
 * [create_conversion](docs/sdks/conversions/README.md#create_conversion) - Create Conversion
 * [fetch_conversion](docs/sdks/conversions/README.md#fetch_conversion) - Fetch Conversion by id
 
-## [conversions_previous_version](docs/sdks/conversionspreviousversion/README.md)
+### [conversions_previous_version](docs/sdks/conversionspreviousversion/README.md)
 
 * [balance_transferwithin_wallet](docs/sdks/conversionspreviousversion/README.md#balance_transferwithin_wallet) - Balance Transfer within Wallet
 
-## [quotes](docs/sdks/quotes/README.md)
+### [quotes](docs/sdks/quotes/README.md)
 
 * [create_quote](docs/sdks/quotes/README.md#create_quote) - Create Quote
 * [fetch_quote](docs/sdks/quotes/README.md#fetch_quote) - Fetch Quote by ID
 
-## [quotes_previous_version](docs/sdks/quotespreviousversion/README.md)
+### [quotes_previous_version](docs/sdks/quotespreviousversion/README.md)
 
 * [exchange_rate_lockand_hold](docs/sdks/quotespreviousversion/README.md#exchange_rate_lockand_hold) - Exchange Rate Lock and Hold
 * [exchange_rate_with_markup](docs/sdks/quotespreviousversion/README.md#exchange_rate_with_markup) - Exchange Rate With Markup
 
-## [rates](docs/sdks/rates/README.md)
+### [rates](docs/sdks/rates/README.md)
 
 * [exchange_rate_v2](docs/sdks/rates/README.md#exchange_rate_v2) - Exchange Rate V2
 * [aggregated_exchange_rates](docs/sdks/rates/README.md#aggregated_exchange_rates) - Fetch historic aggregated exchange rates
 <!-- End SDK Available Operations -->
 
 <!-- Start Dev Containers -->
-
-
 
 <!-- End Dev Containers -->
 

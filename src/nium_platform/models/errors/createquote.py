@@ -18,9 +18,8 @@ class CreateQuote500ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class CreateQuote500ApplicationJSONErrorDetails(Exception):
+class CreateQuote500ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[CreateQuote500ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 500.
@@ -31,8 +30,6 @@ class CreateQuote500ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -58,9 +55,8 @@ class CreateQuote404ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class CreateQuote404ApplicationJSONErrorDetails(Exception):
+class CreateQuote404ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[CreateQuote404ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 404.
@@ -71,8 +67,6 @@ class CreateQuote404ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -96,9 +90,8 @@ class CreateQuote403ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class CreateQuote403ApplicationJSONErrorDetails(Exception):
+class CreateQuote403ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[CreateQuote403ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 403.
@@ -108,8 +101,6 @@ class CreateQuote403ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -133,9 +124,8 @@ class CreateQuote401ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class CreateQuote401ApplicationJSONErrorDetails(Exception):
+class CreateQuote401ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[CreateQuote401ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 401.
@@ -145,8 +135,6 @@ class CreateQuote401ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
@@ -187,9 +175,8 @@ class CreateQuote400ApplicationJSONErrorDetailsCode(str, Enum):
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
-
 @dataclasses.dataclass
-class CreateQuote400ApplicationJSONErrorDetails(Exception):
+class CreateQuote400ApplicationJSONErrorDetails:
     r"""error details description"""
     code: Optional[CreateQuote400ApplicationJSONErrorDetailsCode] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 400.
@@ -208,8 +195,6 @@ class CreateQuote400ApplicationJSONErrorDetails(Exception):
     r"""Description of the error."""
     
 
-    def __str__(self) -> str:
-        return utils.marshal_json(self)
 
 
 @dataclass_json(undefined=Undefined.EXCLUDE)
