@@ -9,6 +9,7 @@ generation:
     disableComments: false
     omitDescriptionIfSummaryPresent: false
   baseServerURL: ""
+  flattenGlobalSecurity: true
   repoURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
   sdkClassName: NIUM-Platform
   singleTagPerOp: false
