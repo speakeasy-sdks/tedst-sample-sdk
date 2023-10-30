@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import dataclasses
-from ..errors import errordetail400 as errors_errordetail400
+from ..errors import historicalrateerrordetail400 as errors_historicalrateerrordetail400
 from dataclasses_json import Undefined, dataclass_json
 from nium_platform import utils
 from typing import List, Optional
@@ -12,7 +12,7 @@ from typing import List, Optional
 
 @dataclasses.dataclass
 class ErrorResponse400(Exception):
-    error_details: Optional[List[errors_errordetail400.ErrorDetail400]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('errorDetails'), 'exclude': lambda f: f is None }})
+    error_details: Optional[List[errors_historicalrateerrordetail400.HistoricalRateErrorDetail400]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('errorDetails'), 'exclude': lambda f: f is None }})
     
 
     def __str__(self) -> str:
