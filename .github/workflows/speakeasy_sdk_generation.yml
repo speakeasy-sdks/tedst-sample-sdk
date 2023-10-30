@@ -21,10 +21,12 @@ jobs:
       languages: |
         - python
       mode: direct
+      openapi_doc_auth_header: x-api-key
       openapi_docs: |
-        - https://raw.githubusercontent.com/speakeasy-sdks-dev/tedst-sample-sdk/main/openapi.yaml
+        - https://app.speakeasyapi.dev/v1/apis/NIUM-Platform/version/9.10.2023/schema/download
       publish_python: true
       speakeasy_version: latest
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      openapi_doc_auth_token: ${{ secrets.SPEAKEASY_API_KEY }}
       speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
