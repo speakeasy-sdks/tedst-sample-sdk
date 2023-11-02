@@ -10,7 +10,7 @@
 ## SDK Installation
 
 ```bash
-pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
+pip install NIUM-Platform
 ```
 <!-- End SDK Installation -->
 
@@ -18,12 +18,12 @@ pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
 <!-- Start SDK Example Usage -->
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -87,12 +87,12 @@ Handling errors in your SDK should largely match your expectations.  All operati
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -106,16 +106,16 @@ res = None
 try:
     res = s.conversions.cancel_conversion(req, "")
 
-except (cancelConversion_400ApplicationJSON_object) as e:
+except (ErrorResponse400) as e:
     print(e) # handle exception
-except (cancelConversion_401ApplicationJSON_object) as e:
+except (ErrorResponse401) as e:
     print(e) # handle exception
-except (cancelConversion_403ApplicationJSON_object) as e:
+except (ErrorResponse403) as e:
     print(e) # handle exception
-except (cancelConversion_404ApplicationJSON_object) as e:
+except (ErrorResponse404) as e:
     print(e) # handle exception
 
-except (cancelConversion_500ApplicationJSON_object) as e:
+except (ErrorResponse500) as e:
     print(e) # handle exception
 
 if res.conversion_cancel_response is not None:
@@ -135,21 +135,21 @@ You can override the default server globally by passing a server index to the `s
 
 | # | Server | Variables |
 | - | ------ | --------- |
-| 0 | `https://gatewaysandbox.nium.com/n1` | None |
+| 0 | `https://gatewaysandbox.nium.com/` | None |
 
 For example:
 
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform(
     server_idx=0
 )
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -174,14 +174,14 @@ The default server can also be overridden globally by passing a URL to the `serv
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform(
-    server_url="https://gatewaysandbox.nium.com/n1"
+    server_url="https://gatewaysandbox.nium.com/"
 )
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -217,8 +217,6 @@ http_client = requests.Session()
 http_client.headers.update({'x-custom-header': 'someValue'})
 s = nium_platform.NIUMPlatform(client: http_client)
 ```
-
-
 <!-- End Custom HTTP Client -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
