@@ -8,7 +8,7 @@ from .utils import utils
 
 
 SERVERS = [
-    'https://gatewaysandbox.nium.com/n1',
+    'https://gatewaysandbox.nium.com/',
 ]
 """Contains the list of servers available to the SDK"""
 
@@ -19,10 +19,10 @@ class SDKConfiguration:
     server_url: str = ''
     server_idx: int = 0
     language: str = 'python'
-    openapi_doc_version: str = '9.10.2023'
-    sdk_version: str = '0.2.1'
+    openapi_doc_version: str = '10.27.2023'
+    sdk_version: str = '0.3.0'
     gen_version: str = '2.173.0'
-    user_agent: str = 'speakeasy-sdk/python 0.2.1 2.173.0 9.10.2023 NIUM-Platform'
+    user_agent: str = 'speakeasy-sdk/python 0.3.0 2.173.0 10.27.2023 NIUM-Platform'
     retry_config: RetryConfig = None
 
     def get_server_details(self) -> Tuple[str, Dict[str, str]]:
