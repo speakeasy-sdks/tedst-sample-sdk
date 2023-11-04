@@ -3,9 +3,8 @@
 from __future__ import annotations
 import dataclasses
 import requests as requests_http
-from dataclasses_json import Undefined, dataclass_json
-from enum import Enum
-from nium_platform import utils
+from ..shared import conversioncancelrequest as shared_conversioncancelrequest
+from ..shared import conversioncancelresponse as shared_conversioncancelresponse
 from typing import Optional
 
 
@@ -16,73 +15,19 @@ class CancelConversionSecurity:
 
 
 
-@dataclass_json(undefined=Undefined.EXCLUDE)
-@dataclasses.dataclass
-class CancelConversionConversionCancelRequest:
-    r"""ConversionCancelRequest"""
-    cancellation_comment: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('cancellationComment'), 'exclude': lambda f: f is None }})
-    r"""Free text comment for clients to record and track cancellation of the conversion."""
-    
-
-
-
 @dataclasses.dataclass
 class CancelConversionRequest:
     client_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'clientHashId', 'style': 'simple', 'explode': False }})
     r"""Unique identifier of the client."""
+    conversion_cancel_request: shared_conversioncancelrequest.ConversionCancelRequest = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
+    r"""ConversionCancelRequest"""
     conversion_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'conversionId', 'style': 'simple', 'explode': False }})
     customer_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'customerHashId', 'style': 'simple', 'explode': False }})
     r"""Unique identifier of the customer."""
-    request_body: CancelConversionConversionCancelRequest = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
-    r"""ConversionCancelRequest"""
     wallet_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'walletHashId', 'style': 'simple', 'explode': False }})
     r"""Unique identifier of the wallet."""
     x_request_id: Optional[str] = dataclasses.field(default=None, metadata={'header': { 'field_name': 'x-request-id', 'style': 'simple', 'explode': False }})
     r"""Enter a unique UUID value"""
-    
-
-
-class CancelConversionConversionCancelResponseCancellationReason(str, Enum):
-    r"""Reason for a conversion cancellation.
-      * `user_cancel`: User initiated cancellation.
-      * `insufficient_fund`: Cancellation due to insufficient balance in the wallet at the time of conversion execution.
-    """
-    USER_CANCEL = 'user_cancel'
-    INSUFFICIENT_FUND = 'insufficient_fund'
-
-class CancelConversionConversionCancelResponseConversionStatus(str, Enum):
-    r"""The status of the conversion."""
-    CREATED = 'created'
-    PROCESSING = 'processing'
-    COMPLETED = 'completed'
-    CANCELLED = 'cancelled'
-    FAILED = 'failed'
-    PENDING_CANCELLATION = 'pending_cancellation'
-
-
-@dataclass_json(undefined=Undefined.EXCLUDE)
-@dataclasses.dataclass
-class CancelConversionConversionCancelResponse:
-    r"""OK"""
-    cancellation_comment: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('cancellationComment'), 'exclude': lambda f: f is None }})
-    r"""Free text comment for clients to record and track cancellation of the conversion."""
-    cancellation_fee: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('cancellationFee'), 'exclude': lambda f: f is None }})
-    r"""The fee charged when executing the cancellation."""
-    cancellation_fee_currency_code: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('cancellationFeeCurrencyCode'), 'exclude': lambda f: f is None }})
-    r"""3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the cancellation fee."""
-    cancellation_fee_system_reference_number: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('cancellationFeeSystemReferenceNumber'), 'exclude': lambda f: f is None }})
-    r"""Unique identifier for wallet financial activities used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions) for details."""
-    cancellation_reason: Optional[CancelConversionConversionCancelResponseCancellationReason] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('cancellationReason'), 'exclude': lambda f: f is None }})
-    r"""Reason for a conversion cancellation.
-      * `user_cancel`: User initiated cancellation.
-      * `insufficient_fund`: Cancellation due to insufficient balance in the wallet at the time of conversion execution.
-    """
-    id: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('id'), 'exclude': lambda f: f is None }})
-    r"""Unique identifier of the conversion."""
-    status: Optional[CancelConversionConversionCancelResponseConversionStatus] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('status'), 'exclude': lambda f: f is None }})
-    r"""The status of the conversion."""
-    system_reference_number: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('systemReferenceNumber'), 'exclude': lambda f: f is None }})
-    r"""Unique identifier for wallet financial activities used in all Nium reports and dashboards. Refer to [doc](https://docs.nium.com/apis/reference/clienttransactions) for details."""
     
 
 
@@ -93,7 +38,7 @@ class CancelConversionResponse:
     r"""HTTP response content type for this operation"""
     status_code: int = dataclasses.field()
     r"""HTTP response status code for this operation"""
-    conversion_cancel_response: Optional[CancelConversionConversionCancelResponse] = dataclasses.field(default=None)
+    conversion_cancel_response: Optional[shared_conversioncancelresponse.ConversionCancelResponse] = dataclasses.field(default=None)
     r"""OK"""
     raw_response: Optional[requests_http.Response] = dataclasses.field(default=None)
     r"""Raw HTTP response; suitable for custom response parsing"""

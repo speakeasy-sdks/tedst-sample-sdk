@@ -2,7 +2,7 @@
 
 from .sdkconfiguration import SDKConfiguration
 from nium_platform import utils
-from nium_platform.models import errors, operations
+from nium_platform.models import errors, operations, shared
 from typing import Optional
 
 class ConversionsPreviousVersion:
@@ -21,7 +21,7 @@ class ConversionsPreviousVersion:
         
         url = utils.generate_url(operations.BalanceTransferwithinWalletRequest, base_url, '/api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/transfer', request)
         headers = utils.get_headers(request)
-        req_content_type, data, form = utils.serialize_request_body(request, "request_body", False, False, 'json')
+        req_content_type, data, form = utils.serialize_request_body(request, "wallet_transfer_dto", False, False, 'json')
         if req_content_type not in ('multipart/form-data', 'multipart/mixed'):
             headers['content-type'] = req_content_type
         if data is None and form is None:
@@ -38,7 +38,7 @@ class ConversionsPreviousVersion:
         
         if http_res.status_code == 200:
             if utils.match_content_type(content_type, 'application/json'):
-                out = utils.unmarshal_json(http_res.text, Optional[operations.BalanceTransferwithinWalletWalletTransferResponseDto])
+                out = utils.unmarshal_json(http_res.text, Optional[shared.WalletTransferResponseDto])
                 res.wallet_transfer_response_dto = out
             else:
                 raise errors.SDKError(f'unknown content-type received: {content_type}', http_res.status_code, http_res.text, http_res)
