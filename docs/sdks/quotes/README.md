@@ -18,15 +18,17 @@ This API creates an FX quote for a currency pair according to the desired lock p
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CreateQuoteRequest(
-    request_body=operations.CreateQuoteRequestBody(
-        conversion_schedule=operations.CreateQuoteRequestBodyConversionSchedule.IMMEDIATE,
+    shared.QuoteCreationRequestWithDestinationAmount(
+        conversion_schedule=shared.ConversionSchedule.IMMEDIATE,
+        destination_amount=13.42,
         destination_currency_code='SGD',
-        lock_period=operations.CreateQuoteRequestBodyLockPeriod.FIFTEEN_MINS,
+        lock_period=shared.LockPeriod.FIFTEEN_MINS,
+        quote_type=shared.QuoteType.PAYOUT,
         source_currency_code='USD',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
