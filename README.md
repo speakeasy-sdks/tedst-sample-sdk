@@ -10,7 +10,7 @@
 ## SDK Installation
 
 ```bash
-pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
+pip install NIUM-Platform
 ```
 <!-- End SDK Installation -->
 
@@ -18,12 +18,12 @@ pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
 <!-- Start SDK Example Usage -->
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -45,27 +45,27 @@ if res.conversion_cancel_response is not None:
 ## Available Resources and Operations
 
 
-### [conversions](docs/sdks/conversions/README.md)
+### [.conversions](docs/sdks/conversions/README.md)
 
 * [cancel_conversion](docs/sdks/conversions/README.md#cancel_conversion) - Cancel Conversion
 * [create_conversion](docs/sdks/conversions/README.md#create_conversion) - Create Conversion
 * [fetch_conversion](docs/sdks/conversions/README.md#fetch_conversion) - Fetch Conversion by id
 
-### [conversions_previous_version](docs/sdks/conversionspreviousversion/README.md)
-
-* [balance_transferwithin_wallet](docs/sdks/conversionspreviousversion/README.md#balance_transferwithin_wallet) - Balance Transfer within Wallet
-
-### [quotes](docs/sdks/quotes/README.md)
-
-* [create_quote](docs/sdks/quotes/README.md#create_quote) - Create Quote
-* [fetch_quote](docs/sdks/quotes/README.md#fetch_quote) - Fetch Quote by ID
-
-### [quotes_previous_version](docs/sdks/quotespreviousversion/README.md)
+### [.quotes_previous_version](docs/sdks/quotespreviousversion/README.md)
 
 * [exchange_rate_lockand_hold](docs/sdks/quotespreviousversion/README.md#exchange_rate_lockand_hold) - Exchange Rate Lock and Hold
 * [exchange_rate_with_markup](docs/sdks/quotespreviousversion/README.md#exchange_rate_with_markup) - Exchange Rate With Markup
 
-### [rates](docs/sdks/rates/README.md)
+### [.conversions_previous_version](docs/sdks/conversionspreviousversion/README.md)
+
+* [balance_transferwithin_wallet](docs/sdks/conversionspreviousversion/README.md#balance_transferwithin_wallet) - Balance Transfer within Wallet
+
+### [.quotes](docs/sdks/quotes/README.md)
+
+* [create_quote](docs/sdks/quotes/README.md#create_quote) - Create Quote
+* [fetch_quote](docs/sdks/quotes/README.md#fetch_quote) - Fetch Quote by ID
+
+### [.rates](docs/sdks/rates/README.md)
 
 * [exchange_rate_v2](docs/sdks/rates/README.md#exchange_rate_v2) - Exchange Rate V2
 * [aggregated_exchange_rates](docs/sdks/rates/README.md#aggregated_exchange_rates) - Fetch historic aggregated exchange rates
@@ -87,12 +87,12 @@ Handling errors in your SDK should largely match your expectations.  All operati
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -106,16 +106,16 @@ res = None
 try:
     res = s.conversions.cancel_conversion(req, "")
 
-except (cancelConversion_400ApplicationJSON_object) as e:
+except (ErrorResponse400) as e:
     print(e) # handle exception
-except (cancelConversion_401ApplicationJSON_object) as e:
+except (ErrorResponse401) as e:
     print(e) # handle exception
-except (cancelConversion_403ApplicationJSON_object) as e:
+except (ErrorResponse403) as e:
     print(e) # handle exception
-except (cancelConversion_404ApplicationJSON_object) as e:
+except (ErrorResponse404) as e:
     print(e) # handle exception
 
-except (cancelConversion_500ApplicationJSON_object) as e:
+except (ErrorResponse500) as e:
     print(e) # handle exception
 
 if res.conversion_cancel_response is not None:
@@ -135,21 +135,20 @@ You can override the default server globally by passing a server index to the `s
 
 | # | Server | Variables |
 | - | ------ | --------- |
-| 0 | `https://gatewaysandbox.nium.com/n1` | None |
+| 0 | `https://gatewaysandbox.nium.com/` | None |
 
 For example:
 
-
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform(
-    server_idx=0
+    server_idx=0,
 )
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -171,17 +170,16 @@ if res.conversion_cancel_response is not None:
 
 The default server can also be overridden globally by passing a URL to the `server_url: str` optional parameter when initializing the SDK client instance. For example:
 
-
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform(
-    server_url="https://gatewaysandbox.nium.com/n1"
+    server_url="https://gatewaysandbox.nium.com/",
 )
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -217,9 +215,76 @@ http_client = requests.Session()
 http_client.headers.update({'x-custom-header': 'someValue'})
 s = nium_platform.NIUMPlatform(client: http_client)
 ```
-
-
 <!-- End Custom HTTP Client -->
+
+
+
+<!-- Start Authentication -->
+
+# Authentication
+
+## Per-Client Security Schemes
+
+Your SDK supports the following security scheme globally:
+
+| Name      | Type      | Scheme    |
+| --------- | --------- | --------- |
+| `default` | apiKey    | API key   |
+
+To authenticate with the API the `default` parameter must be set when initializing the SDK client instance. For example:
+
+```python
+import nium_platform
+from nium_platform.models import operations, shared
+
+s = nium_platform.NIUMPlatform()
+
+req = operations.CancelConversionRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
+        cancellation_comment='Cancelling due to change of plans.',
+    ),
+    client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    conversion_id='conversion_1234567890abcdefABCDEF',
+    customer_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    wallet_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    x_request_id='{{$guid}}',
+)
+
+res = s.conversions.cancel_conversion(req, "")
+
+if res.conversion_cancel_response is not None:
+    # handle response
+    pass
+```
+
+## Per-Operation Security Schemes
+
+Some operations in your SDK require the security scheme to be specified at the request level. For example:
+
+```python
+import nium_platform
+from nium_platform.models import operations, shared
+
+s = nium_platform.NIUMPlatform()
+
+req = operations.CancelConversionRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
+        cancellation_comment='Cancelling due to change of plans.',
+    ),
+    client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    conversion_id='conversion_1234567890abcdefABCDEF',
+    customer_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    wallet_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    x_request_id='{{$guid}}',
+)
+
+res = s.conversions.cancel_conversion(req, "")
+
+if res.conversion_cancel_response is not None:
+    # handle response
+    pass
+```
+<!-- End Authentication -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 

@@ -1,5 +1,5 @@
 # Conversions
-(*conversions*)
+(*.conversions*)
 
 ## Overview
 
@@ -19,12 +19,12 @@ This API allows you to cancel a conversion prior to the execution time.
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -62,13 +62,15 @@ This API allows you to convert the balance from one currency to another within t
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CreateConversionRequest(
-    request_body=operations.CreateConversionRequestBody(
+    shared.ConversionCreationRequestSchemasWithSourceAmount(
         customer_comment='Converting SGD to INR during Travel.',
+        quote_id='quote_1234567890abcdefABCDEF',
+        source_amount=13.42,
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
     customer_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',

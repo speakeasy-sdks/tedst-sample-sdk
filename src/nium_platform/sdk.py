@@ -15,12 +15,12 @@ class NIUMPlatform:
     r"""NIUM Platform: NIUM Platform"""
     conversions: Conversions
     r"""The Conversions API"""
+    quotes_previous_version: QuotesPreviousVersion
+    r"""The previous version of the Quotes API"""
     conversions_previous_version: ConversionsPreviousVersion
     r"""The Previous version of the Conversions API"""
     quotes: Quotes
     r"""The Quotes API"""
-    quotes_previous_version: QuotesPreviousVersion
-    r"""The previous version of the Quotes API"""
     rates: Rates
     r"""The Rates API"""
 
@@ -66,8 +66,8 @@ class NIUMPlatform:
     
     def _init_sdks(self):
         self.conversions = Conversions(self.sdk_configuration)
+        self.quotes_previous_version = QuotesPreviousVersion(self.sdk_configuration)
         self.conversions_previous_version = ConversionsPreviousVersion(self.sdk_configuration)
         self.quotes = Quotes(self.sdk_configuration)
-        self.quotes_previous_version = QuotesPreviousVersion(self.sdk_configuration)
         self.rates = Rates(self.sdk_configuration)
     

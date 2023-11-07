@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import dataclasses
-from ..errors import errorcodes403 as errors_errorcodes403
+from .errorcodes403 import ErrorCodes403
 from dataclasses_json import Undefined, dataclass_json
 from nium_platform import utils
 from typing import Optional
@@ -12,7 +12,7 @@ from typing import Optional
 @dataclasses.dataclass
 class ErrorDetail403:
     r"""error details description"""
-    code: Optional[errors_errorcodes403.ErrorCodes403] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
+    code: Optional[ErrorCodes403] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('code'), 'exclude': lambda f: f is None }})
     r"""The detailed error code associated with HTTP status 403.
     * `fx_client_no_access`: The client is authenticated but not authorized.
     """

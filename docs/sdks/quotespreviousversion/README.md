@@ -1,5 +1,5 @@
 # QuotesPreviousVersion
-(*quotes_previous_version*)
+(*.quotes_previous_version*)
 
 ## Overview
 

@@ -1,5 +1,5 @@
 # Rates
-(*rates*)
+(*.rates*)
 
 ## Overview
 
@@ -55,8 +55,8 @@ This API will retrieve aggregated time series of historical exchange rate.
 ### Example Usage
 
 ```python
-import nium_platform
 import dateutil.parser
+import nium_platform
 from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
