@@ -1,5 +1,5 @@
 # ConversionsPreviousVersion
-(*conversions_previous_version*)
+(*.conversions_previous_version*)
 
 ## Overview
 
@@ -17,12 +17,12 @@ This API allows you to transfer the balance from one currency to another within 
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.BalanceTransferwithinWalletRequest(
-    request_body=operations.BalanceTransferwithinWalletWalletTransferDto(
+    wallet_transfer_dto=shared.WalletTransferDto(
         amount=10,
         customer_comments='Changed SGD to INR during Travel',
         destination_amount=20,
@@ -54,4 +54,8 @@ if res.wallet_transfer_response_dto is not None:
 ### Response
 
 **[operations.BalanceTransferwithinWalletResponse](../../models/operations/balancetransferwithinwalletresponse.md)**
+### Errors
 
+| Error Object    | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| errors.SDKError | 400-600         | */*             |

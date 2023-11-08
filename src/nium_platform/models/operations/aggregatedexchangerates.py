@@ -3,8 +3,8 @@
 from __future__ import annotations
 import dataclasses
 import requests as requests_http
-from ..shared import exchangeratesgetresponse as shared_exchangeratesgetresponse
-from ..shared import window as shared_window
+from ...models.shared import exchangeratesgetresponse as shared_exchangeratesgetresponse
+from ...models.shared import window as shared_window
 from datetime import datetime
 from typing import Optional
 

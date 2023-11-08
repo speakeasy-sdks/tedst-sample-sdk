@@ -1,5 +1,5 @@
 # QuotesPreviousVersion
-(*quotes_previous_version*)
+(*.quotes_previous_version*)
 
 ## Overview
 
@@ -49,7 +49,12 @@ if res.fx_hold_lock_response_content is not None:
 ### Response
 
 **[operations.ExchangeRateLockandHoldResponse](../../models/operations/exchangeratelockandholdresponse.md)**
+### Errors
 
+| Error Object          | Status Code           | Content Type          |
+| --------------------- | --------------------- | --------------------- |
+| errors.WalletAPIError | 400,404,500           | application/json      |
+| errors.SDKError       | 400-600               | */*                   |
 
 ## exchange_rate_with_markup
 
@@ -88,4 +93,8 @@ if res.exchange_rate_v2_response_dto is not None:
 ### Response
 
 **[operations.ExchangeRateWithMarkupResponse](../../models/operations/exchangeratewithmarkupresponse.md)**
+### Errors
 
+| Error Object    | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| errors.SDKError | 400-600         | */*             |
