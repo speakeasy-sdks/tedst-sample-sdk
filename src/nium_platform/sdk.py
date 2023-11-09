@@ -9,25 +9,25 @@ from .rates import Rates
 from .sdkconfiguration import SDKConfiguration
 from nium_platform import utils
 from nium_platform.models import shared
-from typing import Dict
+from typing import Callable, Dict, Union
 
 class NIUMPlatform:
     r"""NIUM Platform: NIUM Platform"""
     conversions: Conversions
     r"""The Conversions API"""
+    quotes_previous_version: QuotesPreviousVersion
+    r"""The previous version of the Quotes API"""
     conversions_previous_version: ConversionsPreviousVersion
     r"""The Previous version of the Conversions API"""
     quotes: Quotes
     r"""The Quotes API"""
-    quotes_previous_version: QuotesPreviousVersion
-    r"""The previous version of the Quotes API"""
     rates: Rates
     r"""The Rates API"""
 
     sdk_configuration: SDKConfiguration
 
     def __init__(self,
-                 default: str,
+                 default: Union[str,Callable[[], str]],
                  server_idx: int = None,
                  server_url: str = None,
                  url_params: Dict[str, str] = None,
@@ -37,7 +37,7 @@ class NIUMPlatform:
         """Instantiates the SDK configuring it with the provided parameters.
         
         :param default: The default required for authentication
-        :type default: str
+        :type default: Union[str,Callable[[], str]]
         :param server_idx: The index of the server to use for all operations
         :type server_idx: int
         :param server_url: The server URL to use for all operations
@@ -52,22 +52,20 @@ class NIUMPlatform:
         if client is None:
             client = requests_http.Session()
         
-        
-        security_client = utils.configure_security_client(client, shared.Security(default = default))
-        
+        security = shared.Security(default = default)
         
         if server_url is not None:
             if url_params is not None:
                 server_url = utils.template_url(server_url, url_params)
 
-        self.sdk_configuration = SDKConfiguration(client, security_client, server_url, server_idx, retry_config=retry_config)
+        self.sdk_configuration = SDKConfiguration(client, security, server_url, server_idx, retry_config=retry_config)
        
         self._init_sdks()
     
     def _init_sdks(self):
         self.conversions = Conversions(self.sdk_configuration)
+        self.quotes_previous_version = QuotesPreviousVersion(self.sdk_configuration)
         self.conversions_previous_version = ConversionsPreviousVersion(self.sdk_configuration)
         self.quotes = Quotes(self.sdk_configuration)
-        self.quotes_previous_version = QuotesPreviousVersion(self.sdk_configuration)
         self.rates = Rates(self.sdk_configuration)
     
