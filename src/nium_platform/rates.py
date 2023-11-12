@@ -13,6 +13,7 @@ class Rates:
         self.sdk_configuration = sdk_config
         
     
+    
     def exchange_rate_v2(self, request: operations.ExchangeRateV2Request, security: operations.ExchangeRateV2Security) -> operations.ExchangeRateV2Response:
         r"""Exchange Rate V2
         This API fetches the interbank FX rate for a currency pair. Note that the rate provided does not include the Nium markup.
@@ -34,7 +35,7 @@ class Rates:
         
         if http_res.status_code == 200:
             if utils.match_content_type(content_type, 'application/json'):
-                out = utils.unmarshal_json(http_res.text, Optional[operations.ExchangeRateV2ExchangeRateV2ResponseDto])
+                out = utils.unmarshal_json(http_res.text, Optional[shared.ExchangeRateV2ResponseDto])
                 res.exchange_rate_v2_response_dto = out
             else:
                 raise errors.SDKError(f'unknown content-type received: {content_type}', http_res.status_code, http_res.text, http_res)
@@ -43,6 +44,7 @@ class Rates:
 
         return res
 
+    
     
     def aggregated_exchange_rates(self, request: operations.AggregatedExchangeRatesRequest, security: operations.AggregatedExchangeRatesSecurity) -> operations.AggregatedExchangeRatesResponse:
         r"""Fetch historic aggregated exchange rates

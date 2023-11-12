@@ -3,7 +3,7 @@
 from __future__ import annotations
 import dataclasses
 import requests as requests_http
-from ..shared import fxholdlockresponsecontent as shared_fxholdlockresponsecontent
+from ...models.shared import fxholdlockresponsecontent as shared_fxholdlockresponsecontent
 from typing import Optional
 
 
