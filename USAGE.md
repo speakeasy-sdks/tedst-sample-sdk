@@ -1,14 +1,12 @@
 <!-- Start SDK Example Usage -->
-
-
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',

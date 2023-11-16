@@ -13,6 +13,7 @@ class QuotesPreviousVersion:
         self.sdk_configuration = sdk_config
         
     
+    
     def exchange_rate_lockand_hold(self, request: operations.ExchangeRateLockandHoldRequest, security: operations.ExchangeRateLockandHoldSecurity) -> operations.ExchangeRateLockandHoldResponse:
         r"""Exchange Rate Lock and Hold
         This API allows you to fetch exchange rate, and lock and hold the rates till a certain amount of time.
@@ -29,7 +30,7 @@ class QuotesPreviousVersion:
         
         http_res = client.request('GET', url, params=query_params, headers=headers)
         content_type = http_res.headers.get('Content-Type')
-
+        
         res = operations.ExchangeRateLockandHoldResponse(status_code=http_res.status_code, content_type=content_type, raw_response=http_res)
         
         if http_res.status_code == 200:
@@ -51,6 +52,7 @@ class QuotesPreviousVersion:
         return res
 
     
+    
     def exchange_rate_with_markup(self, request: operations.ExchangeRateWithMarkupRequest, security: operations.ExchangeRateWithMarkupSecurity) -> operations.ExchangeRateWithMarkupResponse:
         r"""Exchange Rate With Markup
         This API fetches the exchange rate between source currency and destination currency. If either source or destination amount is provided, the equivalent amount will also be returned. Note that you may not send both sourceAmount and destinationAmount as query parameters together. If both are provided, sourceAmount shall be taken for conversion.
@@ -67,12 +69,12 @@ class QuotesPreviousVersion:
         
         http_res = client.request('GET', url, params=query_params, headers=headers)
         content_type = http_res.headers.get('Content-Type')
-
+        
         res = operations.ExchangeRateWithMarkupResponse(status_code=http_res.status_code, content_type=content_type, raw_response=http_res)
         
         if http_res.status_code == 200:
             if utils.match_content_type(content_type, 'application/json'):
-                out = utils.unmarshal_json(http_res.text, Optional[operations.ExchangeRateWithMarkupExchangeRateV2ResponseDto])
+                out = utils.unmarshal_json(http_res.text, Optional[shared.ExchangeRateV2ResponseDto])
                 res.exchange_rate_v2_response_dto = out
             else:
                 raise errors.SDKError(f'unknown content-type received: {content_type}', http_res.status_code, http_res.text, http_res)
