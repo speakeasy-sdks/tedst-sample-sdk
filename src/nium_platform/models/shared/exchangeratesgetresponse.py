@@ -3,8 +3,8 @@
 from __future__ import annotations
 import dataclasses
 import dateutil.parser
-from ..shared import exchangerategetresponse as shared_exchangerategetresponse
-from ..shared import window as shared_window
+from .exchangerategetresponse import ExchangeRateGetResponse
+from .window import Window
 from dataclasses_json import Undefined, dataclass_json
 from datetime import datetime
 from nium_platform import utils
@@ -17,11 +17,11 @@ class ExchangeRatesGetResponse:
     destination_currency_code: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('destinationCurrencyCode'), 'exclude': lambda f: f is None }})
     r"""3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the destination amount."""
     end: Optional[datetime] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('end'), 'encoder': utils.datetimeisoformat(True), 'decoder': dateutil.parser.isoparse, 'exclude': lambda f: f is None }})
-    exchange_rates: Optional[List[shared_exchangerategetresponse.ExchangeRateGetResponse]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('exchangeRates'), 'exclude': lambda f: f is None }})
+    exchange_rates: Optional[List[ExchangeRateGetResponse]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('exchangeRates'), 'exclude': lambda f: f is None }})
     source_currency_code: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('sourceCurrencyCode'), 'exclude': lambda f: f is None }})
     r"""3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the source amount."""
     start: Optional[datetime] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('start'), 'encoder': utils.datetimeisoformat(True), 'decoder': dateutil.parser.isoparse, 'exclude': lambda f: f is None }})
-    window: Optional[shared_window.Window] = dataclasses.field(default=shared_window.Window.ONE_DAY, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('window'), 'exclude': lambda f: f is None }})
+    window: Optional[Window] = dataclasses.field(default=Window.ONE_DAY, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('window'), 'exclude': lambda f: f is None }})
     r"""Specifies the field by which the results should be grouped."""
     
 
