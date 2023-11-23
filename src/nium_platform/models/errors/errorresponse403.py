@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import dataclasses
-from ..errors import errordetail403 as errors_errordetail403
+from ...models.shared import errordetail403 as shared_errordetail403
 from dataclasses_json import Undefined, dataclass_json
 from nium_platform import utils
 from typing import List, Optional
@@ -12,7 +12,8 @@ from typing import List, Optional
 
 @dataclasses.dataclass
 class ErrorResponse403(Exception):
-    error_details: Optional[List[errors_errordetail403.ErrorDetail403]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('errorDetails'), 'exclude': lambda f: f is None }})
+    r"""Error response when the requested resource is forbidden."""
+    error_details: Optional[List[shared_errordetail403.ErrorDetail403]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('errorDetails'), 'exclude': lambda f: f is None }})
     
 
     def __str__(self) -> str:
