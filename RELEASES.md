@@ -23,3 +23,13 @@ Based on:
 - Speakeasy CLI 1.109.0 (2.173.0) https://github.com/speakeasy-api/speakeasy
 ### Generated
 - [python v0.2.1] .
+
+## 2023-11-28 01:02:07
+### Changes
+Based on:
+- OpenAPI Doc 10.27.2023 
+- Speakeasy CLI 1.123.0 (2.202.2) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [python v0.3.0] .
+### Releases
+- [PyPI v0.3.0] https://pypi.org/project/NIUM-Platform/0.3.0 - .
