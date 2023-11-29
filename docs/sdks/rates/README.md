@@ -46,7 +46,11 @@ if res.exchange_rate_v2_response_dto is not None:
 ### Response
 
 **[operations.ExchangeRateV2Response](../../models/operations/exchangeratev2response.md)**
+### Errors
 
+| Error Object    | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| errors.SDKError | 400-600         | */*             |
 
 ## aggregated_exchange_rates
 
@@ -55,8 +59,8 @@ This API will retrieve aggregated time series of historical exchange rate.
 ### Example Usage
 
 ```python
-import nium_platform
 import dateutil.parser
+import nium_platform
 from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
@@ -85,4 +89,12 @@ if res.exchange_rates_get_response is not None:
 ### Response
 
 **[operations.AggregatedExchangeRatesResponse](../../models/operations/aggregatedexchangeratesresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 400-600                 | */*                     |
