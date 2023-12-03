@@ -18,17 +18,19 @@ This API creates an FX quote for a currency pair according to the desired lock p
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CreateQuoteRequest(
-    request_body=operations.CreateQuoteRequestBody(
-        conversion_schedule=operations.CreateQuoteRequestBodyConversionSchedule.IMMEDIATE,
-        destination_currency_code='SGD',
-        lock_period=operations.CreateQuoteRequestBodyLockPeriod.FIFTEEN_MINS,
-        source_currency_code='USD',
-    ),
+    quote_creation_request=shared.WithDestinationAmount(
+    conversion_schedule=shared.ConversionSchedule.IMMEDIATE,
+    destination_amount=13.42,
+    destination_currency_code='SGD',
+    lock_period=shared.LockPeriod.FIFTEEN_MINS,
+    quote_type=shared.QuoteType.PAYOUT,
+    source_currency_code='USD',
+),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
     x_request_id='{{$guid}}',
 )
@@ -51,7 +53,16 @@ if res.quote_creation_response is not None:
 ### Response
 
 **[operations.CreateQuoteResponse](../../models/operations/createquoteresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 400-600                 | */*                     |
 
 ## fetch_quote
 
@@ -89,4 +100,13 @@ if res.quote_creation_response is not None:
 ### Response
 
 **[operations.FetchQuoteResponse](../../models/operations/fetchquoteresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 400-600                 | */*                     |
