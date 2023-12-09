@@ -3,8 +3,8 @@
 from __future__ import annotations
 import dataclasses
 import requests as requests_http
-from ..shared import exchangeratesgetresponse as shared_exchangeratesgetresponse
-from ..shared import window as shared_window
+from ...models.shared import exchangeratesgetresponse as shared_exchangeratesgetresponse
+from ...models.shared import window as shared_window
 from datetime import datetime
 from typing import Optional
 
@@ -39,11 +39,11 @@ class AggregatedExchangeRatesRequest:
 class AggregatedExchangeRatesResponse:
     content_type: str = dataclasses.field()
     r"""HTTP response content type for this operation"""
+    raw_response: requests_http.Response = dataclasses.field()
+    r"""Raw HTTP response; suitable for custom response parsing"""
     status_code: int = dataclasses.field()
     r"""HTTP response status code for this operation"""
     exchange_rates_get_response: Optional[shared_exchangeratesgetresponse.ExchangeRatesGetResponse] = dataclasses.field(default=None)
     r"""OK"""
-    raw_response: Optional[requests_http.Response] = dataclasses.field(default=None)
-    r"""Raw HTTP response; suitable for custom response parsing"""
     
 
