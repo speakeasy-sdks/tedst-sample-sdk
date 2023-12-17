@@ -31,7 +31,7 @@ req = operations.ExchangeRateLockandHoldRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes_previous_version.exchange_rate_lockand_hold(req, "")
+res = s.quotes_previous_version.exchange_rate_lockand_hold(req, "<YOUR_API_KEY_HERE>")
 
 if res.fx_hold_lock_response_content is not None:
     # handle response
@@ -49,7 +49,12 @@ if res.fx_hold_lock_response_content is not None:
 ### Response
 
 **[operations.ExchangeRateLockandHoldResponse](../../models/operations/exchangeratelockandholdresponse.md)**
+### Errors
 
+| Error Object          | Status Code           | Content Type          |
+| --------------------- | --------------------- | --------------------- |
+| errors.WalletAPIError | 400,404,500           | application/json      |
+| errors.SDKError       | 400-600               | */*                   |
 
 ## exchange_rate_with_markup
 
@@ -70,7 +75,7 @@ req = operations.ExchangeRateWithMarkupRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes_previous_version.exchange_rate_with_markup(req, "")
+res = s.quotes_previous_version.exchange_rate_with_markup(req, "<YOUR_API_KEY_HERE>")
 
 if res.exchange_rate_v2_response_dto is not None:
     # handle response
@@ -88,4 +93,8 @@ if res.exchange_rate_v2_response_dto is not None:
 ### Response
 
 **[operations.ExchangeRateWithMarkupResponse](../../models/operations/exchangeratewithmarkupresponse.md)**
+### Errors
 
+| Error Object    | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| errors.SDKError | 400-600         | */*             |
