@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 import dataclasses
-from ..errors import errordetail500 as errors_errordetail500
+from ...models.shared import errordetail500 as shared_errordetail500
 from dataclasses_json import Undefined, dataclass_json
 from nium_platform import utils
 from typing import List, Optional
@@ -12,8 +12,9 @@ from typing import List, Optional
 
 @dataclasses.dataclass
 class ErrorResponse500(Exception):
-    error_details: Optional[List[errors_errordetail500.ErrorDetail500]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('errorDetails'), 'exclude': lambda f: f is None }})
+    r"""Error response when service has internal error."""
+    error_details: Optional[List[shared_errordetail500.ErrorDetail500]] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('errorDetails'), 'exclude': lambda f: f is None }})
     
 
     def __str__(self) -> str:
-        return utils.marshal_json(self)
+        return utils.marshal_json(self, type(self))
