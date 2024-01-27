@@ -19,12 +19,12 @@ This API allows you to cancel a conversion prior to the execution time.
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -34,7 +34,7 @@ req = operations.CancelConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.cancel_conversion(req, "")
+res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
 
 if res.conversion_cancel_response is not None:
     # handle response
@@ -52,7 +52,16 @@ if res.conversion_cancel_response is not None:
 ### Response
 
 **[operations.CancelConversionResponse](../../models/operations/cancelconversionresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 4x-5xx                  | */*                     |
 
 ## create_conversion
 
@@ -62,21 +71,23 @@ This API allows you to convert the balance from one currency to another within t
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CreateConversionRequest(
-    request_body=operations.CreateConversionRequestBody(
-        customer_comment='Converting SGD to INR during Travel.',
-    ),
+    conversion_creation_request=shared.ConversionCreationRequestSchemasWithSourceAmount(
+    customer_comment='Converting SGD to INR during Travel.',
+    quote_id='quote_1234567890abcdefABCDEF',
+    source_amount=13.42,
+),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
     customer_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
     wallet_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.create_conversion(req, "")
+res = s.conversions.create_conversion(req, "<YOUR_API_KEY_HERE>")
 
 if res.conversion_creation_response is not None:
     # handle response
@@ -94,7 +105,16 @@ if res.conversion_creation_response is not None:
 ### Response
 
 **[operations.CreateConversionResponse](../../models/operations/createconversionresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 4x-5xx                  | */*                     |
 
 ## fetch_conversion
 
@@ -116,7 +136,7 @@ req = operations.FetchConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.fetch_conversion(req, "")
+res = s.conversions.fetch_conversion(req, "<YOUR_API_KEY_HERE>")
 
 if res.conversion_creation_response is not None:
     # handle response
@@ -134,4 +154,13 @@ if res.conversion_creation_response is not None:
 ### Response
 
 **[operations.FetchConversionResponse](../../models/operations/fetchconversionresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 4x-5xx                  | */*                     |
