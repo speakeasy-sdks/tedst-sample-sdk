@@ -2,27 +2,28 @@
 
 import requests
 from dataclasses import dataclass
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Callable, Union
 from .utils.retries import RetryConfig
 from .utils import utils
+from nium_platform.models import shared
 
 
 SERVERS = [
-    'https://gatewaysandbox.nium.com/n1',
+    'https://gatewaysandbox.nium.com/',
 ]
 """Contains the list of servers available to the SDK"""
 
 @dataclass
 class SDKConfiguration:
     client: requests.Session
-    security_client: requests.Session
+    security: Union[shared.Security,Callable[[], shared.Security]] = None
     server_url: str = ''
     server_idx: int = 0
     language: str = 'python'
-    openapi_doc_version: str = '9.10.2023'
-    sdk_version: str = '0.2.1'
-    gen_version: str = '2.173.0'
-    user_agent: str = 'speakeasy-sdk/python 0.2.1 2.173.0 9.10.2023 NIUM-Platform'
+    openapi_doc_version: str = '10.27.2023'
+    sdk_version: str = '0.3.0'
+    gen_version: str = '2.250.2'
+    user_agent: str = 'speakeasy-sdk/python 0.3.0 2.250.2 10.27.2023 NIUM-Platform'
     retry_config: RetryConfig = None
 
     def get_server_details(self) -> Tuple[str, Dict[str, str]]:
