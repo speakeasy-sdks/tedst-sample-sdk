@@ -17,18 +17,18 @@ This API allows you to transfer the balance from one currency to another within 
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.BalanceTransferwithinWalletRequest(
-    request_body=operations.BalanceTransferwithinWalletWalletTransferDto(
+    wallet_transfer_dto=shared.WalletTransferDto(
+        destination_currency='INR',
+        source_currency='SGD',
         amount=10,
         customer_comments='Changed SGD to INR during Travel',
         destination_amount=20,
-        destination_currency='INR',
         quote_id='UUID',
-        source_currency='SGD',
     ),
     client_hash_id='string',
     customer_hash_id='string',
@@ -36,7 +36,7 @@ req = operations.BalanceTransferwithinWalletRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions_previous_version.balance_transferwithin_wallet(req, "")
+res = s.conversions_previous_version.balance_transferwithin_wallet(req, "<YOUR_API_KEY_HERE>")
 
 if res.wallet_transfer_response_dto is not None:
     # handle response
@@ -54,4 +54,8 @@ if res.wallet_transfer_response_dto is not None:
 ### Response
 
 **[operations.BalanceTransferwithinWalletResponse](../../models/operations/balancetransferwithinwalletresponse.md)**
+### Errors
 
+| Error Object    | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| errors.SDKError | 4x-5xx          | */*             |
