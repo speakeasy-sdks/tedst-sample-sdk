@@ -3,8 +3,8 @@
 from __future__ import annotations
 import dataclasses
 import requests as requests_http
-from dataclasses_json import Undefined, dataclass_json
-from nium_platform import utils
+from ...models.shared import wallettransferdto as shared_wallettransferdto
+from ...models.shared import wallettransferresponsedto as shared_wallettransferresponsedto
 from typing import Optional
 
 
@@ -15,65 +15,17 @@ class BalanceTransferwithinWalletSecurity:
 
 
 
-@dataclass_json(undefined=Undefined.EXCLUDE)
-@dataclasses.dataclass
-class BalanceTransferwithinWalletWalletTransferDto:
-    destination_currency: str = dataclasses.field(metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('destinationCurrency') }})
-    r"""This field accepts the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the destination amount."""
-    source_currency: str = dataclasses.field(metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('sourceCurrency') }})
-    r"""This field accepts the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the source amount."""
-    amount: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('amount'), 'exclude': lambda f: f is None }})
-    r"""This field is the amount in source currency which is to be transferred. If destinationAmount is provided, it will take preference over this field."""
-    customer_comments: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('customerComments'), 'exclude': lambda f: f is None }})
-    r"""This field accepts customer comments for the balance transfer within wallet.
-    Maximum character limit is 512.
-    """
-    destination_amount: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('destinationAmount'), 'exclude': lambda f: f is None }})
-    r"""This field is the amount in destination currency which is to be transferred. If provided, amount field is not considered. If this field is skipped, amount is considered in source currency."""
-    quote_id: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('quoteId'), 'exclude': lambda f: f is None }})
-    
-
-
-
 @dataclasses.dataclass
 class BalanceTransferwithinWalletRequest:
+    wallet_transfer_dto: shared_wallettransferdto.WalletTransferDto = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
     client_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'clientHashId', 'style': 'simple', 'explode': False }})
     r"""Unique client identifier generated and shared before API handshake."""
     customer_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'customerHashId', 'style': 'simple', 'explode': False }})
     r"""Unique customer identifier generated on customer creation."""
-    request_body: BalanceTransferwithinWalletWalletTransferDto = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
     wallet_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'walletHashId', 'style': 'simple', 'explode': False }})
     r"""Unique wallet identifier generated simultaneously with customer creation."""
     x_request_id: Optional[str] = dataclasses.field(default=None, metadata={'header': { 'field_name': 'x-request-id', 'style': 'simple', 'explode': False }})
     r"""Enter a unique UUID value"""
-    
-
-
-
-@dataclass_json(undefined=Undefined.EXCLUDE)
-@dataclasses.dataclass
-class BalanceTransferwithinWalletWalletTransferResponseDto:
-    r"""OK"""
-    destination_amount: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('destinationAmount'), 'exclude': lambda f: f is None }})
-    r"""Destination amount is the actual amount credited after deducting Fx and markup."""
-    destination_currency_code: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('destinationCurrencyCode'), 'exclude': lambda f: f is None }})
-    r"""This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the destination amount."""
-    exchange_rate: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('exchangeRate'), 'exclude': lambda f: f is None }})
-    r"""Exchange rate between source and destination currencies."""
-    markup_amount: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('markupAmount'), 'exclude': lambda f: f is None }})
-    r"""Markup amount calculated on the transaction."""
-    markup_rate: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('markupRate'), 'exclude': lambda f: f is None }})
-    r"""Cross-currency markup percentage levied by NIUM."""
-    net_exchange_rate: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('netExchangeRate'), 'exclude': lambda f: f is None }})
-    r"""Exchange rate between source and destination currencies derived after accounting for markup. The netExchangeRate should be divided by the scaling factor to fetch the actual exchange rate."""
-    scaling_factor: Optional[int] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('scalingFactor'), 'exclude': lambda f: f is None }})
-    r"""The netExchangeRate should be divided by the scaling factor to fetch the actual exchange rate."""
-    source_amount: Optional[float] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('sourceAmount'), 'exclude': lambda f: f is None }})
-    r"""Source amount is the amount transferred by the customer."""
-    source_currency_code: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('sourceCurrencyCode'), 'exclude': lambda f: f is None }})
-    r"""This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the source amount."""
-    system_reference_number: Optional[str] = dataclasses.field(default=None, metadata={'dataclasses_json': { 'letter_case': utils.get_field_name('systemReferenceNumber'), 'exclude': lambda f: f is None }})
-    r"""Unique auth code generated for the transaction by the card issuance platform."""
     
 
 
@@ -84,9 +36,9 @@ class BalanceTransferwithinWalletResponse:
     r"""HTTP response content type for this operation"""
     status_code: int = dataclasses.field()
     r"""HTTP response status code for this operation"""
-    raw_response: Optional[requests_http.Response] = dataclasses.field(default=None)
+    raw_response: requests_http.Response = dataclasses.field()
     r"""Raw HTTP response; suitable for custom response parsing"""
-    wallet_transfer_response_dto: Optional[BalanceTransferwithinWalletWalletTransferResponseDto] = dataclasses.field(default=None)
+    wallet_transfer_response_dto: Optional[shared_wallettransferresponsedto.WalletTransferResponseDto] = dataclasses.field(default=None)
     r"""OK"""
     
 
