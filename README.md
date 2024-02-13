@@ -6,24 +6,27 @@
     
 </div>
 
-<!-- Start SDK Installation -->
+<!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
 ```bash
-pip install git+https://github.com/speakeasy-sdks/tedst-sample-sdk.git
+pip install NIUM-Platform
 ```
-<!-- End SDK Installation -->
+<!-- End SDK Installation [installation] -->
 
+<!-- Start SDK Example Usage [usage] -->
 ## SDK Example Usage
-<!-- Start SDK Example Usage -->
+
+### Example
+
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -33,23 +36,27 @@ req = operations.CancelConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.cancel_conversion(req, "")
+res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
 
 if res.conversion_cancel_response is not None:
     # handle response
     pass
 ```
-<!-- End SDK Example Usage -->
+<!-- End SDK Example Usage [usage] -->
 
-<!-- Start SDK Available Operations -->
+<!-- Start Available Resources and Operations [operations] -->
 ## Available Resources and Operations
-
 
 ### [conversions](docs/sdks/conversions/README.md)
 
 * [cancel_conversion](docs/sdks/conversions/README.md#cancel_conversion) - Cancel Conversion
 * [create_conversion](docs/sdks/conversions/README.md#create_conversion) - Create Conversion
 * [fetch_conversion](docs/sdks/conversions/README.md#fetch_conversion) - Fetch Conversion by id
+
+### [quotes_previous_version](docs/sdks/quotespreviousversion/README.md)
+
+* [exchange_rate_lockand_hold](docs/sdks/quotespreviousversion/README.md#exchange_rate_lockand_hold) - Exchange Rate Lock and Hold
+* [exchange_rate_with_markup](docs/sdks/quotespreviousversion/README.md#exchange_rate_with_markup) - Exchange Rate With Markup
 
 ### [conversions_previous_version](docs/sdks/conversionspreviousversion/README.md)
 
@@ -60,39 +67,38 @@ if res.conversion_cancel_response is not None:
 * [create_quote](docs/sdks/quotes/README.md#create_quote) - Create Quote
 * [fetch_quote](docs/sdks/quotes/README.md#fetch_quote) - Fetch Quote by ID
 
-### [quotes_previous_version](docs/sdks/quotespreviousversion/README.md)
-
-* [exchange_rate_lockand_hold](docs/sdks/quotespreviousversion/README.md#exchange_rate_lockand_hold) - Exchange Rate Lock and Hold
-* [exchange_rate_with_markup](docs/sdks/quotespreviousversion/README.md#exchange_rate_with_markup) - Exchange Rate With Markup
-
 ### [rates](docs/sdks/rates/README.md)
 
 * [exchange_rate_v2](docs/sdks/rates/README.md#exchange_rate_v2) - Exchange Rate V2
 * [aggregated_exchange_rates](docs/sdks/rates/README.md#aggregated_exchange_rates) - Fetch historic aggregated exchange rates
-<!-- End SDK Available Operations -->
-
-<!-- Start Dev Containers -->
-
-<!-- End Dev Containers -->
+<!-- End Available Resources and Operations [operations] -->
 
 
 
-<!-- Start Error Handling -->
-# Error Handling
+<!-- Start Error Handling [errors] -->
+## Error Handling
 
-Handling errors in your SDK should largely match your expectations.  All operations return a response object or raise an error.  If Error objects are specified in your OpenAPI Spec, the SDK will raise the appropriate Error type.
+Handling errors in this SDK should largely match your expectations.  All operations return a response object or raise an error.  If Error objects are specified in your OpenAPI Spec, the SDK will raise the appropriate Error type.
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 4x-5xx                  | */*                     |
 
-## Example
+### Example
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import errors, operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -104,52 +110,57 @@ req = operations.CancelConversionRequest(
 
 res = None
 try:
-    res = s.conversions.cancel_conversion(req, "")
-
-except (cancelConversion_400ApplicationJSON_object) as e:
-    print(e) # handle exception
-except (cancelConversion_401ApplicationJSON_object) as e:
-    print(e) # handle exception
-except (cancelConversion_403ApplicationJSON_object) as e:
-    print(e) # handle exception
-except (cancelConversion_404ApplicationJSON_object) as e:
-    print(e) # handle exception
-
-except (cancelConversion_500ApplicationJSON_object) as e:
-    print(e) # handle exception
+    res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
+except errors.ErrorResponse400 as e:
+    # handle exception
+    raise(e)
+except errors.ErrorResponse401 as e:
+    # handle exception
+    raise(e)
+except errors.ErrorResponse403 as e:
+    # handle exception
+    raise(e)
+except errors.ErrorResponse404 as e:
+    # handle exception
+    raise(e)
+except errors.ErrorResponse500 as e:
+    # handle exception
+    raise(e)
+except errors.SDKError as e:
+    # handle exception
+    raise(e)
 
 if res.conversion_cancel_response is not None:
     # handle response
     pass
 ```
-<!-- End Error Handling -->
+<!-- End Error Handling [errors] -->
 
 
 
-<!-- Start Server Selection -->
-# Server Selection
+<!-- Start Server Selection [server] -->
+## Server Selection
 
-## Select Server by Index
+### Select Server by Index
 
 You can override the default server globally by passing a server index to the `server_idx: int` optional parameter when initializing the SDK client instance. The selected server will then be used as the default on the operations that use it. This table lists the indexes associated with the available servers:
 
 | # | Server | Variables |
 | - | ------ | --------- |
-| 0 | `https://gatewaysandbox.nium.com/n1` | None |
+| 0 | `https://gatewaysandbox.nium.com/` | None |
 
-For example:
-
+#### Example
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform(
-    server_idx=0
+    server_idx=0,
 )
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -159,7 +170,7 @@ req = operations.CancelConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.cancel_conversion(req, "")
+res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
 
 if res.conversion_cancel_response is not None:
     # handle response
@@ -167,21 +178,19 @@ if res.conversion_cancel_response is not None:
 ```
 
 
-## Override Server URL Per-Client
+### Override Server URL Per-Client
 
 The default server can also be overridden globally by passing a URL to the `server_url: str` optional parameter when initializing the SDK client instance. For example:
-
-
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform(
-    server_url="https://gatewaysandbox.nium.com/n1"
+    server_url="https://gatewaysandbox.nium.com/",
 )
 
 req = operations.CancelConversionRequest(
-    request_body=operations.CancelConversionConversionCancelRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
         cancellation_comment='Cancelling due to change of plans.',
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -191,24 +200,22 @@ req = operations.CancelConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.cancel_conversion(req, "")
+res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
 
 if res.conversion_cancel_response is not None:
     # handle response
     pass
 ```
-<!-- End Server Selection -->
+<!-- End Server Selection [server] -->
 
 
 
-<!-- Start Custom HTTP Client -->
-# Custom HTTP Client
+<!-- Start Custom HTTP Client [http-client] -->
+## Custom HTTP Client
 
-The Python SDK makes API calls using the (requests)[https://pypi.org/project/requests/] HTTP library.  In order to provide a convenient way to configure timeouts, cookies, proxies, custom headers, and other low-level configuration, you can initialize the SDK client with a custom `requests.Session` object.
+The Python SDK makes API calls using the [requests](https://pypi.org/project/requests/) HTTP library.  In order to provide a convenient way to configure timeouts, cookies, proxies, custom headers, and other low-level configuration, you can initialize the SDK client with a custom `requests.Session` object.
 
-
-For example, you could specify a header for every request that your sdk makes as follows:
-
+For example, you could specify a header for every request that this sdk makes as follows:
 ```python
 import nium_platform
 import requests
@@ -217,9 +224,49 @@ http_client = requests.Session()
 http_client.headers.update({'x-custom-header': 'someValue'})
 s = nium_platform.NIUMPlatform(client: http_client)
 ```
+<!-- End Custom HTTP Client [http-client] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+### Per-Client Security Schemes
+
+This SDK supports the following security scheme globally:
+
+| Name      | Type      | Scheme    |
+| --------- | --------- | --------- |
+| `default` | apiKey    | API key   |
+
+To authenticate with the API the `default` parameter must be set when initializing the SDK client instance. For example:
 
 
-<!-- End Custom HTTP Client -->
+### Per-Operation Security Schemes
+
+Some operations in this SDK require the security scheme to be specified at the request level. For example:
+```python
+import nium_platform
+from nium_platform.models import operations, shared
+
+s = nium_platform.NIUMPlatform()
+
+req = operations.CancelConversionRequest(
+    conversion_cancel_request=shared.ConversionCancelRequest(
+        cancellation_comment='Cancelling due to change of plans.',
+    ),
+    client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    conversion_id='conversion_1234567890abcdefABCDEF',
+    customer_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    wallet_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
+    x_request_id='{{$guid}}',
+)
+
+res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
+
+if res.conversion_cancel_response is not None:
+    # handle response
+    pass
+```
+<!-- End Authentication [security] -->
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 

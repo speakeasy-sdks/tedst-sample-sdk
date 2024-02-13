@@ -18,22 +18,24 @@ This API creates an FX quote for a currency pair according to the desired lock p
 
 ```python
 import nium_platform
-from nium_platform.models import operations
+from nium_platform.models import operations, shared
 
 s = nium_platform.NIUMPlatform()
 
 req = operations.CreateQuoteRequest(
-    request_body=operations.CreateQuoteRequestBody(
-        conversion_schedule=operations.CreateQuoteRequestBodyConversionSchedule.IMMEDIATE,
+    quote_creation_request=shared.WithDestinationAmount(
         destination_currency_code='SGD',
-        lock_period=operations.CreateQuoteRequestBodyLockPeriod.FIFTEEN_MINS,
+        quote_type=shared.QuoteType.PAYOUT,
         source_currency_code='USD',
+        conversion_schedule=shared.ConversionSchedule.IMMEDIATE,
+        destination_amount=13.42,
+        lock_period=shared.LockPeriod.FIFTEEN_MINS,
     ),
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes.create_quote(req, "")
+res = s.quotes.create_quote(req, "<YOUR_API_KEY_HERE>")
 
 if res.quote_creation_response is not None:
     # handle response
@@ -51,7 +53,16 @@ if res.quote_creation_response is not None:
 ### Response
 
 **[operations.CreateQuoteResponse](../../models/operations/createquoteresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 4x-5xx                  | */*                     |
 
 ## fetch_quote
 
@@ -71,7 +82,7 @@ req = operations.FetchQuoteRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes.fetch_quote(req, "")
+res = s.quotes.fetch_quote(req, "<YOUR_API_KEY_HERE>")
 
 if res.quote_creation_response is not None:
     # handle response
@@ -89,4 +100,13 @@ if res.quote_creation_response is not None:
 ### Response
 
 **[operations.FetchQuoteResponse](../../models/operations/fetchquoteresponse.md)**
+### Errors
 
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ErrorResponse400 | 400                     | application/json        |
+| errors.ErrorResponse401 | 401                     | application/json        |
+| errors.ErrorResponse403 | 403                     | application/json        |
+| errors.ErrorResponse404 | 404                     | application/json        |
+| errors.ErrorResponse500 | 500                     | application/json        |
+| errors.SDKError         | 4x-5xx                  | */*                     |
