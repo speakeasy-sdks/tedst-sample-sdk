@@ -23,8 +23,8 @@ from nium_platform.models import operations
 s = nium_platform.NIUMPlatform()
 
 req = operations.ExchangeRateV2Request(
-    destination_currency_code='string',
-    source_currency_code='string',
+    destination_currency_code='<value>',
+    source_currency_code='<value>',
     x_request_id='{{$guid}}',
 )
 

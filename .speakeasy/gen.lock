@@ -4,9 +4,9 @@ management:
   docChecksum: 5d7add4f03428b0dd04a1f9b4712143b
   docVersion: 10.27.2023
   speakeasyVersion: internal
-  generationVersion: 2.253.0
-  releaseVersion: 0.3.0
-  configChecksum: b745c8b152615da189adf1bf2da3ddfb
+  generationVersion: 2.258.2
+  releaseVersion: 0.3.1
+  configChecksum: aae054dbbbf3479c8780a4f380646081
   repoURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
@@ -14,7 +14,7 @@ management:
 features:
   python:
     constsAndDefaults: 0.1.2
-    core: 4.4.5
+    core: 4.4.6
     globalSecurity: 2.83.2
     globalServerURLs: 2.82.1
     methodSecurity: 2.82.1

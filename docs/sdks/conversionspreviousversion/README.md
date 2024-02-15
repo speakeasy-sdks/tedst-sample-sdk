@@ -30,9 +30,9 @@ req = operations.BalanceTransferwithinWalletRequest(
         destination_amount=20,
         quote_id='UUID',
     ),
-    client_hash_id='string',
-    customer_hash_id='string',
-    wallet_hash_id='string',
+    client_hash_id='<value>',
+    customer_hash_id='<value>',
+    wallet_hash_id='<value>',
     x_request_id='{{$guid}}',
 )
 

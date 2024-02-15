@@ -33,3 +33,13 @@ Based on:
 - [python v0.3.0] .
 ### Releases
 - [PyPI v0.3.0] https://pypi.org/project/NIUM-Platform/0.3.0 - .
+
+## 2024-02-15 00:50:05
+### Changes
+Based on:
+- OpenAPI Doc 10.27.2023 
+- Speakeasy CLI 1.180.1 (2.258.2) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [python v0.3.1] .
+### Releases
+- [PyPI v0.3.1] https://pypi.org/project/NIUM-Platform/0.3.1 - .
