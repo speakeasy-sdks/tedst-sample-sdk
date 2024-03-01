@@ -4,9 +4,9 @@ management:
   docChecksum: 5d7add4f03428b0dd04a1f9b4712143b
   docVersion: 10.27.2023
   speakeasyVersion: internal
-  generationVersion: 2.272.4
-  releaseVersion: 0.3.2
-  configChecksum: 899590b5caca402a56db41a0ce99c2ae
+  generationVersion: 2.275.4
+  releaseVersion: 0.4.0
+  configChecksum: 35a1f4d1314930f96265dc5f1b8e48df
   repoURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
@@ -14,8 +14,8 @@ management:
 features:
   python:
     constsAndDefaults: 0.1.2
-    core: 4.4.7
-    globalSecurity: 2.83.3
+    core: 4.5.0
+    globalSecurity: 2.83.4
     globalServerURLs: 2.82.1
     methodSecurity: 2.82.1
     unions: 2.82.5
@@ -167,3 +167,6 @@ generatedFiles:
   - docs/sdks/rates/README.md
   - USAGE.md
   - .gitattributes
+  - src/nium_platform/_hooks/sdkhooks.py
+  - src/nium_platform/_hooks/types.py
+  - src/nium_platform/_hooks/__init__.py
