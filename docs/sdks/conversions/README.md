@@ -39,6 +39,7 @@ res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
 if res.conversion_cancel_response is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters
@@ -92,6 +93,7 @@ res = s.conversions.create_conversion(req, "<YOUR_API_KEY_HERE>")
 if res.conversion_creation_response is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters
@@ -141,6 +143,7 @@ res = s.conversions.fetch_conversion(req, "<YOUR_API_KEY_HERE>")
 if res.conversion_creation_response is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters

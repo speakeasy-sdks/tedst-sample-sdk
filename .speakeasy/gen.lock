@@ -3,22 +3,23 @@ id: eee14aa0-5120-43a5-8574-3d62c9031295
 management:
   docChecksum: 5d7add4f03428b0dd04a1f9b4712143b
   docVersion: 10.27.2023
-  speakeasyVersion: internal
-  generationVersion: 2.275.4
-  releaseVersion: 0.4.0
-  configChecksum: 35a1f4d1314930f96265dc5f1b8e48df
+  speakeasyVersion: 1.204.1
+  generationVersion: 2.279.1
+  releaseVersion: 0.5.0
+  configChecksum: a13b39cdc7c7e373086d20d9e4383a2c
   repoURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
   published: true
 features:
   python:
-    constsAndDefaults: 0.1.2
-    core: 4.5.0
+    constsAndDefaults: 0.1.3
+    core: 4.5.1
     globalSecurity: 2.83.4
     globalServerURLs: 2.82.1
     methodSecurity: 2.82.1
-    unions: 2.82.5
+    responseFormat: 0.1.0
+    unions: 2.82.6
 generatedFiles:
   - src/nium_platform/sdkconfiguration.py
   - src/nium_platform/conversions.py
@@ -27,6 +28,7 @@ generatedFiles:
   - src/nium_platform/quotes.py
   - src/nium_platform/rates.py
   - src/nium_platform/sdk.py
+  - py.typed
   - pylintrc
   - setup.py
   - src/nium_platform/__init__.py

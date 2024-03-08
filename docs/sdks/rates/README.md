@@ -33,6 +33,7 @@ res = s.rates.exchange_rate_v2(req, "<YOUR_API_KEY_HERE>")
 if res.exchange_rate_v2_response_dto is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters
@@ -75,6 +76,7 @@ res = s.rates.aggregated_exchange_rates(req, "<YOUR_API_KEY_HERE>")
 if res.exchange_rates_get_response is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters

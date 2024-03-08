@@ -21,5 +21,6 @@ res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
 if res.conversion_cancel_response is not None:
     # handle response
     pass
+
 ```
 <!-- End SDK Example Usage [usage] -->

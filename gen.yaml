@@ -12,7 +12,7 @@ generation:
   baseServerURL: ""
   flattenGlobalSecurity: true
 python:
-  version: 0.4.0
+  version: 0.5.0
   additionalDependencies:
     dependencies: {}
     extraDependencies:
@@ -33,3 +33,4 @@ python:
   maxMethodParams: 0
   outputModelSuffix: output
   packageName: NIUM-Platform
+  responseFormat: envelope

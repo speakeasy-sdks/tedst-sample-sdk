@@ -41,6 +41,7 @@ res = s.conversions_previous_version.balance_transferwithin_wallet(req, "<YOUR_A
 if res.wallet_transfer_response_dto is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters

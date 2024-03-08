@@ -36,6 +36,7 @@ res = s.quotes_previous_version.exchange_rate_lockand_hold(req, "<YOUR_API_KEY_H
 if res.fx_hold_lock_response_content is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters
@@ -80,6 +81,7 @@ res = s.quotes_previous_version.exchange_rate_with_markup(req, "<YOUR_API_KEY_HE
 if res.exchange_rate_v2_response_dto is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters

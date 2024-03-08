@@ -40,6 +40,7 @@ res = s.quotes.create_quote(req, "<YOUR_API_KEY_HERE>")
 if res.quote_creation_response is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters
@@ -87,6 +88,7 @@ res = s.quotes.fetch_quote(req, "<YOUR_API_KEY_HERE>")
 if res.quote_creation_response is not None:
     # handle response
     pass
+
 ```
 
 ### Parameters
