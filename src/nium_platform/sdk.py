@@ -10,7 +10,7 @@ from .sdkconfiguration import SDKConfiguration
 from nium_platform import utils
 from nium_platform._hooks import SDKHooks
 from nium_platform.models import shared
-from typing import Callable, Dict, Union
+from typing import Callable, Dict, Optional, Union
 
 class NIUMPlatform:
     r"""NIUM Platform: NIUM Platform"""
@@ -29,14 +29,14 @@ class NIUMPlatform:
 
     def __init__(self,
                  default: Union[str, Callable[[], str]],
-                 server_idx: int = None,
-                 server_url: str = None,
-                 url_params: Dict[str, str] = None,
-                 client: requests_http.Session = None,
-                 retry_config: utils.RetryConfig = None
+                 server_idx: Optional[int] = None,
+                 server_url: Optional[str] = None,
+                 url_params: Optional[Dict[str, str]] = None,
+                 client: Optional[requests_http.Session] = None,
+                 retry_config: Optional[utils.RetryConfig] = None
                  ) -> None:
         """Instantiates the SDK configuring it with the provided parameters.
-        
+
         :param default: The default required for authentication
         :type default: Union[str, Callable[[], str]]
         :param server_idx: The index of the server to use for all operations
@@ -52,18 +52,24 @@ class NIUMPlatform:
         """
         if client is None:
             client = requests_http.Session()
-        
+
         if callable(default):
             def security():
                 return shared.Security(default = default())
         else:
             security = shared.Security(default = default)
-        
+
         if server_url is not None:
             if url_params is not None:
                 server_url = utils.template_url(server_url, url_params)
 
-        self.sdk_configuration = SDKConfiguration(client, security, server_url, server_idx, retry_config=retry_config)
+        self.sdk_configuration = SDKConfiguration(
+            client,
+            security,
+            server_url,
+            server_idx,
+            retry_config=retry_config
+        )
 
         hooks = SDKHooks()
 
@@ -73,14 +79,14 @@ class NIUMPlatform:
             self.sdk_configuration.server_url = server_url
 
         # pylint: disable=protected-access
-        self.sdk_configuration._hooks=hooks
-       
+        self.sdk_configuration._hooks = hooks
+
         self._init_sdks()
-    
+
+
     def _init_sdks(self):
         self.conversions = Conversions(self.sdk_configuration)
         self.quotes_previous_version = QuotesPreviousVersion(self.sdk_configuration)
         self.conversions_previous_version = ConversionsPreviousVersion(self.sdk_configuration)
         self.quotes = Quotes(self.sdk_configuration)
         self.rates = Rates(self.sdk_configuration)
-    
