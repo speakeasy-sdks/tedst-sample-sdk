@@ -20,7 +20,9 @@ This API creates an FX quote for a currency pair according to the desired lock p
 import nium_platform
 from nium_platform.models import operations, shared
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.CreateQuoteRequest(
     quote_creation_request=shared.WithDestinationAmount(
@@ -35,7 +37,7 @@ req = operations.CreateQuoteRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes.create_quote(req, "<YOUR_API_KEY_HERE>")
+res = s.quotes.create_quote(req)
 
 if res.quote_creation_response is not None:
     # handle response
@@ -45,10 +47,9 @@ if res.quote_creation_response is not None:
 
 ### Parameters
 
-| Parameter                                                                        | Type                                                                             | Required                                                                         | Description                                                                      |
-| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `request`                                                                        | [operations.CreateQuoteRequest](../../models/operations/createquoterequest.md)   | :heavy_check_mark:                                                               | The request object to use for the request.                                       |
-| `security`                                                                       | [operations.CreateQuoteSecurity](../../models/operations/createquotesecurity.md) | :heavy_check_mark:                                                               | The security requirements to use for the request.                                |
+| Parameter                                                                      | Type                                                                           | Required                                                                       | Description                                                                    |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `request`                                                                      | [operations.CreateQuoteRequest](../../models/operations/createquoterequest.md) | :heavy_check_mark:                                                             | The request object to use for the request.                                     |
 
 
 ### Response
@@ -75,7 +76,9 @@ This API allows to fetch a quote. A quote is used to identify the exchange rate,
 import nium_platform
 from nium_platform.models import operations
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.FetchQuoteRequest(
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -83,7 +86,7 @@ req = operations.FetchQuoteRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes.fetch_quote(req, "<YOUR_API_KEY_HERE>")
+res = s.quotes.fetch_quote(req)
 
 if res.quote_creation_response is not None:
     # handle response
@@ -93,10 +96,9 @@ if res.quote_creation_response is not None:
 
 ### Parameters
 
-| Parameter                                                                      | Type                                                                           | Required                                                                       | Description                                                                    |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| `request`                                                                      | [operations.FetchQuoteRequest](../../models/operations/fetchquoterequest.md)   | :heavy_check_mark:                                                             | The request object to use for the request.                                     |
-| `security`                                                                     | [operations.FetchQuoteSecurity](../../models/operations/fetchquotesecurity.md) | :heavy_check_mark:                                                             | The security requirements to use for the request.                              |
+| Parameter                                                                    | Type                                                                         | Required                                                                     | Description                                                                  |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `request`                                                                    | [operations.FetchQuoteRequest](../../models/operations/fetchquoterequest.md) | :heavy_check_mark:                                                           | The request object to use for the request.                                   |
 
 
 ### Response

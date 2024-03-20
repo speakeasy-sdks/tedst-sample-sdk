@@ -16,16 +16,19 @@ class Conversions:
         
     
     
-    def cancel_conversion(self, request: operations.CancelConversionRequest, security: operations.CancelConversionSecurity) -> operations.CancelConversionResponse:
+    def cancel_conversion(self, request: operations.CancelConversionRequest) -> operations.CancelConversionResponse:
         r"""Cancel Conversion
         This API allows you to cancel a conversion prior to the execution time.
         """
-        hook_ctx = HookContext(operation_id='cancelConversion', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='cancelConversion', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.CancelConversionRequest, base_url, '/api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/conversions/{conversionId}/cancel', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         req_content_type, data, form = utils.serialize_request_body(request, operations.CancelConversionRequest, "conversion_cancel_request", False, False, 'json')
@@ -111,16 +114,19 @@ class Conversions:
 
     
     
-    def create_conversion(self, request: operations.CreateConversionRequest, security: operations.CreateConversionSecurity) -> operations.CreateConversionResponse:
+    def create_conversion(self, request: operations.CreateConversionRequest) -> operations.CreateConversionResponse:
         r"""Create Conversion
         This API allows you to convert the balance from one currency to another within the same customer wallet either at the current market rate or using a previous exchange rate quote. This API allows you to select a settlement schedule for the conversion.
         """
-        hook_ctx = HookContext(operation_id='createConversion', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='createConversion', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.CreateConversionRequest, base_url, '/api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/conversions', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         req_content_type, data, form = utils.serialize_request_body(request, operations.CreateConversionRequest, "conversion_creation_request", False, False, 'json')
@@ -206,16 +212,19 @@ class Conversions:
 
     
     
-    def fetch_conversion(self, request: operations.FetchConversionRequest, security: operations.FetchConversionSecurity) -> operations.FetchConversionResponse:
+    def fetch_conversion(self, request: operations.FetchConversionRequest) -> operations.FetchConversionResponse:
         r"""Fetch Conversion by id
         This API will retrieve an existing conversion with the conversionId.
         """
-        hook_ctx = HookContext(operation_id='fetchConversion', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='fetchConversion', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.FetchConversionRequest, base_url, '/api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/conversions/{conversionId}', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         headers['Accept'] = 'application/json'

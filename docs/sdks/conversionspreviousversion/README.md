@@ -19,7 +19,9 @@ This API allows you to transfer the balance from one currency to another within 
 import nium_platform
 from nium_platform.models import operations, shared
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.BalanceTransferwithinWalletRequest(
     wallet_transfer_dto=shared.WalletTransferDto(
@@ -36,7 +38,7 @@ req = operations.BalanceTransferwithinWalletRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions_previous_version.balance_transferwithin_wallet(req, "<YOUR_API_KEY_HERE>")
+res = s.conversions_previous_version.balance_transferwithin_wallet(req)
 
 if res.wallet_transfer_response_dto is not None:
     # handle response
@@ -46,10 +48,9 @@ if res.wallet_transfer_response_dto is not None:
 
 ### Parameters
 
-| Parameter                                                                                                        | Type                                                                                                             | Required                                                                                                         | Description                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `request`                                                                                                        | [operations.BalanceTransferwithinWalletRequest](../../models/operations/balancetransferwithinwalletrequest.md)   | :heavy_check_mark:                                                                                               | The request object to use for the request.                                                                       |
-| `security`                                                                                                       | [operations.BalanceTransferwithinWalletSecurity](../../models/operations/balancetransferwithinwalletsecurity.md) | :heavy_check_mark:                                                                                               | The security requirements to use for the request.                                                                |
+| Parameter                                                                                                      | Type                                                                                                           | Required                                                                                                       | Description                                                                                                    |
+| -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `request`                                                                                                      | [operations.BalanceTransferwithinWalletRequest](../../models/operations/balancetransferwithinwalletrequest.md) | :heavy_check_mark:                                                                                             | The request object to use for the request.                                                                     |
 
 
 ### Response

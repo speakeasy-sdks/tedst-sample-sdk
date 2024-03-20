@@ -20,7 +20,9 @@ This API allows you to fetch exchange rate, and lock and hold the rates till a c
 import nium_platform
 from nium_platform.models import operations
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.ExchangeRateLockandHoldRequest(
     client_hash_id='{{clientHashId}}',
@@ -31,7 +33,7 @@ req = operations.ExchangeRateLockandHoldRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes_previous_version.exchange_rate_lockand_hold(req, "<YOUR_API_KEY_HERE>")
+res = s.quotes_previous_version.exchange_rate_lockand_hold(req)
 
 if res.fx_hold_lock_response_content is not None:
     # handle response
@@ -41,10 +43,9 @@ if res.fx_hold_lock_response_content is not None:
 
 ### Parameters
 
-| Parameter                                                                                                | Type                                                                                                     | Required                                                                                                 | Description                                                                                              |
-| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `request`                                                                                                | [operations.ExchangeRateLockandHoldRequest](../../models/operations/exchangeratelockandholdrequest.md)   | :heavy_check_mark:                                                                                       | The request object to use for the request.                                                               |
-| `security`                                                                                               | [operations.ExchangeRateLockandHoldSecurity](../../models/operations/exchangeratelockandholdsecurity.md) | :heavy_check_mark:                                                                                       | The security requirements to use for the request.                                                        |
+| Parameter                                                                                              | Type                                                                                                   | Required                                                                                               | Description                                                                                            |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                              | [operations.ExchangeRateLockandHoldRequest](../../models/operations/exchangeratelockandholdrequest.md) | :heavy_check_mark:                                                                                     | The request object to use for the request.                                                             |
 
 
 ### Response
@@ -67,7 +68,9 @@ This API fetches the exchange rate between source currency and destination curre
 import nium_platform
 from nium_platform.models import operations
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.ExchangeRateWithMarkupRequest(
     client_hash_id='<value>',
@@ -76,7 +79,7 @@ req = operations.ExchangeRateWithMarkupRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.quotes_previous_version.exchange_rate_with_markup(req, "<YOUR_API_KEY_HERE>")
+res = s.quotes_previous_version.exchange_rate_with_markup(req)
 
 if res.exchange_rate_v2_response_dto is not None:
     # handle response
@@ -86,10 +89,9 @@ if res.exchange_rate_v2_response_dto is not None:
 
 ### Parameters
 
-| Parameter                                                                                              | Type                                                                                                   | Required                                                                                               | Description                                                                                            |
-| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                              | [operations.ExchangeRateWithMarkupRequest](../../models/operations/exchangeratewithmarkuprequest.md)   | :heavy_check_mark:                                                                                     | The request object to use for the request.                                                             |
-| `security`                                                                                             | [operations.ExchangeRateWithMarkupSecurity](../../models/operations/exchangeratewithmarkupsecurity.md) | :heavy_check_mark:                                                                                     | The security requirements to use for the request.                                                      |
+| Parameter                                                                                            | Type                                                                                                 | Required                                                                                             | Description                                                                                          |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `request`                                                                                            | [operations.ExchangeRateWithMarkupRequest](../../models/operations/exchangeratewithmarkuprequest.md) | :heavy_check_mark:                                                                                   | The request object to use for the request.                                                           |
 
 
 ### Response

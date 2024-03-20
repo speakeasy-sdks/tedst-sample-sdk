@@ -8,13 +8,6 @@ from typing import Optional
 
 
 @dataclasses.dataclass
-class ExchangeRateV2Security:
-    default: str = dataclasses.field(metadata={'security': { 'scheme': True, 'type': 'apiKey', 'sub_type': 'header', 'field_name': 'x-api-key' }})
-    
-
-
-
-@dataclasses.dataclass
 class ExchangeRateV2Request:
     destination_currency_code: str = dataclasses.field(metadata={'query_param': { 'field_name': 'destinationCurrencyCode', 'style': 'form', 'explode': True }})
     r"""This field contains the 3-letter [ISO-4217 currency code](https://www.iso.org/iso-4217-currency-codes.html) for the destination amount."""

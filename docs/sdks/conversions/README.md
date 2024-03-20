@@ -21,7 +21,9 @@ This API allows you to cancel a conversion prior to the execution time.
 import nium_platform
 from nium_platform.models import operations, shared
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.CancelConversionRequest(
     conversion_cancel_request=shared.ConversionCancelRequest(
@@ -34,7 +36,7 @@ req = operations.CancelConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
+res = s.conversions.cancel_conversion(req)
 
 if res.conversion_cancel_response is not None:
     # handle response
@@ -44,10 +46,9 @@ if res.conversion_cancel_response is not None:
 
 ### Parameters
 
-| Parameter                                                                                  | Type                                                                                       | Required                                                                                   | Description                                                                                |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `request`                                                                                  | [operations.CancelConversionRequest](../../models/operations/cancelconversionrequest.md)   | :heavy_check_mark:                                                                         | The request object to use for the request.                                                 |
-| `security`                                                                                 | [operations.CancelConversionSecurity](../../models/operations/cancelconversionsecurity.md) | :heavy_check_mark:                                                                         | The security requirements to use for the request.                                          |
+| Parameter                                                                                | Type                                                                                     | Required                                                                                 | Description                                                                              |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `request`                                                                                | [operations.CancelConversionRequest](../../models/operations/cancelconversionrequest.md) | :heavy_check_mark:                                                                       | The request object to use for the request.                                               |
 
 
 ### Response
@@ -74,7 +75,9 @@ This API allows you to convert the balance from one currency to another within t
 import nium_platform
 from nium_platform.models import operations, shared
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.CreateConversionRequest(
     conversion_creation_request=shared.ConversionCreationRequestSchemasWithSourceAmount(
@@ -88,7 +91,7 @@ req = operations.CreateConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.create_conversion(req, "<YOUR_API_KEY_HERE>")
+res = s.conversions.create_conversion(req)
 
 if res.conversion_creation_response is not None:
     # handle response
@@ -98,10 +101,9 @@ if res.conversion_creation_response is not None:
 
 ### Parameters
 
-| Parameter                                                                                  | Type                                                                                       | Required                                                                                   | Description                                                                                |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `request`                                                                                  | [operations.CreateConversionRequest](../../models/operations/createconversionrequest.md)   | :heavy_check_mark:                                                                         | The request object to use for the request.                                                 |
-| `security`                                                                                 | [operations.CreateConversionSecurity](../../models/operations/createconversionsecurity.md) | :heavy_check_mark:                                                                         | The security requirements to use for the request.                                          |
+| Parameter                                                                                | Type                                                                                     | Required                                                                                 | Description                                                                              |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `request`                                                                                | [operations.CreateConversionRequest](../../models/operations/createconversionrequest.md) | :heavy_check_mark:                                                                       | The request object to use for the request.                                               |
 
 
 ### Response
@@ -128,7 +130,9 @@ This API will retrieve an existing conversion with the conversionId.
 import nium_platform
 from nium_platform.models import operations
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.FetchConversionRequest(
     client_hash_id='abc12345-5d6e-0a8b-c8d7-3a7706a0c312',
@@ -138,7 +142,7 @@ req = operations.FetchConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.fetch_conversion(req, "<YOUR_API_KEY_HERE>")
+res = s.conversions.fetch_conversion(req)
 
 if res.conversion_creation_response is not None:
     # handle response
@@ -148,10 +152,9 @@ if res.conversion_creation_response is not None:
 
 ### Parameters
 
-| Parameter                                                                                | Type                                                                                     | Required                                                                                 | Description                                                                              |
-| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `request`                                                                                | [operations.FetchConversionRequest](../../models/operations/fetchconversionrequest.md)   | :heavy_check_mark:                                                                       | The request object to use for the request.                                               |
-| `security`                                                                               | [operations.FetchConversionSecurity](../../models/operations/fetchconversionsecurity.md) | :heavy_check_mark:                                                                       | The security requirements to use for the request.                                        |
+| Parameter                                                                              | Type                                                                                   | Required                                                                               | Description                                                                            |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `request`                                                                              | [operations.FetchConversionRequest](../../models/operations/fetchconversionrequest.md) | :heavy_check_mark:                                                                     | The request object to use for the request.                                             |
 
 
 ### Response

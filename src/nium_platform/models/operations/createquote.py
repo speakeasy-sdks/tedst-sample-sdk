@@ -9,13 +9,6 @@ from typing import Optional, Union
 
 
 @dataclasses.dataclass
-class CreateQuoteSecurity:
-    default: str = dataclasses.field(metadata={'security': { 'scheme': True, 'type': 'apiKey', 'sub_type': 'header', 'field_name': 'x-api-key' }})
-    
-
-
-
-@dataclasses.dataclass
 class CreateQuoteRequest:
     quote_creation_request: Union[shared_quotecreationrequest.WithNoAmount, shared_quotecreationrequest.WithSourceAmount, shared_quotecreationrequest.WithDestinationAmount] = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
     r"""quoteCreationRequest"""

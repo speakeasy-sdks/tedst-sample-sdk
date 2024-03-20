@@ -10,13 +10,6 @@ from typing import Optional
 
 
 @dataclasses.dataclass
-class AggregatedExchangeRatesSecurity:
-    default: str = dataclasses.field(metadata={'security': { 'scheme': True, 'type': 'apiKey', 'sub_type': 'header', 'field_name': 'x-api-key' }})
-    
-
-
-
-@dataclasses.dataclass
 class AggregatedExchangeRatesRequest:
     destination_currency_code: str = dataclasses.field(metadata={'query_param': { 'field_name': 'destinationCurrencyCode', 'style': 'form', 'explode': True }})
     r"""This field contains the 3-letter [currency-and-country-codes](https://docs.nium.com/apis/docs/currency-and-country-codes)."""

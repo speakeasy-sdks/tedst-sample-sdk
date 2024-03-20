@@ -3,10 +3,10 @@ id: eee14aa0-5120-43a5-8574-3d62c9031295
 management:
   docChecksum: 5d7add4f03428b0dd04a1f9b4712143b
   docVersion: 10.27.2023
-  speakeasyVersion: 1.207.1
-  generationVersion: 2.280.6
-  releaseVersion: 0.5.1
-  configChecksum: 4d6915ac5b8152b4444fac10198abf69
+  speakeasyVersion: 1.213.0
+  generationVersion: 2.283.1
+  releaseVersion: 0.6.0
+  configChecksum: ad82d769939f5042a605ae5abb00baab
   repoURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
   repoSubDirectory: .
   installationURL: https://github.com/speakeasy-sdks/tedst-sample-sdk.git
@@ -15,9 +15,8 @@ features:
   python:
     constsAndDefaults: 0.1.3
     core: 4.5.1
-    globalSecurity: 2.83.4
+    globalSecurity: 2.83.5
     globalServerURLs: 2.82.2
-    methodSecurity: 2.82.1
     responseFormat: 0.1.0
     unions: 2.82.6
 generatedFiles:
@@ -86,34 +85,24 @@ generatedFiles:
   - src/nium_platform/models/errors/__init__.py
   - src/nium_platform/models/operations/__init__.py
   - src/nium_platform/models/shared/__init__.py
-  - docs/models/operations/cancelconversionsecurity.md
   - docs/models/operations/cancelconversionrequest.md
   - docs/models/operations/cancelconversionresponse.md
-  - docs/models/operations/createconversionsecurity.md
   - docs/models/operations/createconversionrequest.md
   - docs/models/operations/createconversionresponse.md
-  - docs/models/operations/fetchconversionsecurity.md
   - docs/models/operations/fetchconversionrequest.md
   - docs/models/operations/fetchconversionresponse.md
-  - docs/models/operations/exchangeratelockandholdsecurity.md
   - docs/models/operations/exchangeratelockandholdrequest.md
   - docs/models/operations/exchangeratelockandholdresponse.md
-  - docs/models/operations/exchangeratewithmarkupsecurity.md
   - docs/models/operations/exchangeratewithmarkuprequest.md
   - docs/models/operations/exchangeratewithmarkupresponse.md
-  - docs/models/operations/balancetransferwithinwalletsecurity.md
   - docs/models/operations/balancetransferwithinwalletrequest.md
   - docs/models/operations/balancetransferwithinwalletresponse.md
-  - docs/models/operations/createquotesecurity.md
   - docs/models/operations/createquoterequest.md
   - docs/models/operations/createquoteresponse.md
-  - docs/models/operations/fetchquotesecurity.md
   - docs/models/operations/fetchquoterequest.md
   - docs/models/operations/fetchquoteresponse.md
-  - docs/models/operations/exchangeratev2security.md
   - docs/models/operations/exchangeratev2request.md
   - docs/models/operations/exchangeratev2response.md
-  - docs/models/operations/aggregatedexchangeratessecurity.md
   - docs/models/operations/aggregatedexchangeratesrequest.md
   - docs/models/operations/aggregatedexchangeratesresponse.md
   - docs/models/shared/conversioncancelresponse.md

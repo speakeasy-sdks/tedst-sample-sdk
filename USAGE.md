@@ -3,7 +3,9 @@
 import nium_platform
 from nium_platform.models import operations, shared
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.CancelConversionRequest(
     conversion_cancel_request=shared.ConversionCancelRequest(
@@ -16,7 +18,7 @@ req = operations.CancelConversionRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.conversions.cancel_conversion(req, "<YOUR_API_KEY_HERE>")
+res = s.conversions.cancel_conversion(req)
 
 if res.conversion_cancel_response is not None:
     # handle response

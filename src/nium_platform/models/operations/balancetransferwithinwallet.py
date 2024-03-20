@@ -9,13 +9,6 @@ from typing import Optional
 
 
 @dataclasses.dataclass
-class BalanceTransferwithinWalletSecurity:
-    default: str = dataclasses.field(metadata={'security': { 'scheme': True, 'type': 'apiKey', 'sub_type': 'header', 'field_name': 'x-api-key' }})
-    
-
-
-
-@dataclasses.dataclass
 class BalanceTransferwithinWalletRequest:
     wallet_transfer_dto: shared_wallettransferdto.WalletTransferDto = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
     client_hash_id: str = dataclasses.field(metadata={'path_param': { 'field_name': 'clientHashId', 'style': 'simple', 'explode': False }})

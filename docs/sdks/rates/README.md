@@ -20,7 +20,9 @@ This API fetches the interbank FX rate for a currency pair. Note that the rate p
 import nium_platform
 from nium_platform.models import operations
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.ExchangeRateV2Request(
     destination_currency_code='<value>',
@@ -28,7 +30,7 @@ req = operations.ExchangeRateV2Request(
     x_request_id='{{$guid}}',
 )
 
-res = s.rates.exchange_rate_v2(req, "<YOUR_API_KEY_HERE>")
+res = s.rates.exchange_rate_v2(req)
 
 if res.exchange_rate_v2_response_dto is not None:
     # handle response
@@ -38,10 +40,9 @@ if res.exchange_rate_v2_response_dto is not None:
 
 ### Parameters
 
-| Parameter                                                                              | Type                                                                                   | Required                                                                               | Description                                                                            |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `request`                                                                              | [operations.ExchangeRateV2Request](../../models/operations/exchangeratev2request.md)   | :heavy_check_mark:                                                                     | The request object to use for the request.                                             |
-| `security`                                                                             | [operations.ExchangeRateV2Security](../../models/operations/exchangeratev2security.md) | :heavy_check_mark:                                                                     | The security requirements to use for the request.                                      |
+| Parameter                                                                            | Type                                                                                 | Required                                                                             | Description                                                                          |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| `request`                                                                            | [operations.ExchangeRateV2Request](../../models/operations/exchangeratev2request.md) | :heavy_check_mark:                                                                   | The request object to use for the request.                                           |
 
 
 ### Response
@@ -63,7 +64,9 @@ This API will retrieve aggregated time series of historical exchange rate.
 import nium_platform
 from nium_platform.models import operations
 
-s = nium_platform.NIUMPlatform()
+s = nium_platform.NIUMPlatform(
+    default="<YOUR_API_KEY_HERE>",
+)
 
 req = operations.AggregatedExchangeRatesRequest(
     destination_currency_code='SGD',
@@ -71,7 +74,7 @@ req = operations.AggregatedExchangeRatesRequest(
     x_request_id='{{$guid}}',
 )
 
-res = s.rates.aggregated_exchange_rates(req, "<YOUR_API_KEY_HERE>")
+res = s.rates.aggregated_exchange_rates(req)
 
 if res.exchange_rates_get_response is not None:
     # handle response
@@ -81,10 +84,9 @@ if res.exchange_rates_get_response is not None:
 
 ### Parameters
 
-| Parameter                                                                                                | Type                                                                                                     | Required                                                                                                 | Description                                                                                              |
-| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `request`                                                                                                | [operations.AggregatedExchangeRatesRequest](../../models/operations/aggregatedexchangeratesrequest.md)   | :heavy_check_mark:                                                                                       | The request object to use for the request.                                                               |
-| `security`                                                                                               | [operations.AggregatedExchangeRatesSecurity](../../models/operations/aggregatedexchangeratessecurity.md) | :heavy_check_mark:                                                                                       | The security requirements to use for the request.                                                        |
+| Parameter                                                                                              | Type                                                                                                   | Required                                                                                               | Description                                                                                            |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                              | [operations.AggregatedExchangeRatesRequest](../../models/operations/aggregatedexchangeratesrequest.md) | :heavy_check_mark:                                                                                     | The request object to use for the request.                                                             |
 
 
 ### Response

@@ -23,9 +23,9 @@ class SDKConfiguration:
     server_idx: int = 0
     language: str = 'python'
     openapi_doc_version: str = '10.27.2023'
-    sdk_version: str = '0.5.1'
-    gen_version: str = '2.280.6'
-    user_agent: str = 'speakeasy-sdk/python 0.5.1 2.280.6 10.27.2023 NIUM-Platform'
+    sdk_version: str = '0.6.0'
+    gen_version: str = '2.283.1'
+    user_agent: str = 'speakeasy-sdk/python 0.6.0 2.283.1 10.27.2023 NIUM-Platform'
     retry_config: RetryConfig = None
     _hooks: SDKHooks = None
 

@@ -16,16 +16,19 @@ class QuotesPreviousVersion:
         
     
     
-    def exchange_rate_lockand_hold(self, request: operations.ExchangeRateLockandHoldRequest, security: operations.ExchangeRateLockandHoldSecurity) -> operations.ExchangeRateLockandHoldResponse:
+    def exchange_rate_lockand_hold(self, request: operations.ExchangeRateLockandHoldRequest) -> operations.ExchangeRateLockandHoldResponse:
         r"""Exchange Rate Lock and Hold
         This API allows you to fetch exchange rate, and lock and hold the rates till a certain amount of time.
         """
-        hook_ctx = HookContext(operation_id='ExchangeRateLockandHold', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='ExchangeRateLockandHold', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.ExchangeRateLockandHoldRequest, base_url, '/api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/lockExchangeRate', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         query_params = { **utils.get_query_params(operations.ExchangeRateLockandHoldRequest, request), **query_params }
@@ -79,16 +82,19 @@ class QuotesPreviousVersion:
 
     
     
-    def exchange_rate_with_markup(self, request: operations.ExchangeRateWithMarkupRequest, security: operations.ExchangeRateWithMarkupSecurity) -> operations.ExchangeRateWithMarkupResponse:
+    def exchange_rate_with_markup(self, request: operations.ExchangeRateWithMarkupRequest) -> operations.ExchangeRateWithMarkupResponse:
         r"""Exchange Rate With Markup
         This API fetches the exchange rate between source currency and destination currency. If either source or destination amount is provided, the equivalent amount will also be returned. Note that you may not send both sourceAmount and destinationAmount as query parameters together. If both are provided, sourceAmount shall be taken for conversion.
         """
-        hook_ctx = HookContext(operation_id='exchangeRateWithMarkup', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='exchangeRateWithMarkup', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.ExchangeRateWithMarkupRequest, base_url, '/api/v1/client/{clientHashId}/exchangeRate', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         query_params = { **utils.get_query_params(operations.ExchangeRateWithMarkupRequest, request), **query_params }

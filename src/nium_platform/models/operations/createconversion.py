@@ -9,13 +9,6 @@ from typing import Optional, Union
 
 
 @dataclasses.dataclass
-class CreateConversionSecurity:
-    default: str = dataclasses.field(metadata={'security': { 'scheme': True, 'type': 'apiKey', 'sub_type': 'header', 'field_name': 'x-api-key' }})
-    
-
-
-
-@dataclasses.dataclass
 class CreateConversionRequest:
     conversion_creation_request: Union[Union[shared_conversioncreationrequest.ConversionCreationRequestSchemasWithSourceAmount, shared_conversioncreationrequest.ConversionCreationRequestSchemasWithDestinationAmount], Union[shared_conversioncreationrequest.ConversionCreationRequestWithSourceAmount, shared_conversioncreationrequest.ConversionCreationRequestWithDestinationAmount]] = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
     r"""ConversionCreationRequest"""

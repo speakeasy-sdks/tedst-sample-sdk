@@ -9,13 +9,6 @@ from typing import Optional
 
 
 @dataclasses.dataclass
-class CancelConversionSecurity:
-    default: str = dataclasses.field(metadata={'security': { 'scheme': True, 'type': 'apiKey', 'sub_type': 'header', 'field_name': 'x-api-key' }})
-    
-
-
-
-@dataclasses.dataclass
 class CancelConversionRequest:
     conversion_cancel_request: shared_conversioncancelrequest.ConversionCancelRequest = dataclasses.field(metadata={'request': { 'media_type': 'application/json' }})
     r"""ConversionCancelRequest"""

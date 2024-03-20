@@ -16,16 +16,19 @@ class Quotes:
         
     
     
-    def create_quote(self, request: operations.CreateQuoteRequest, security: operations.CreateQuoteSecurity) -> operations.CreateQuoteResponse:
+    def create_quote(self, request: operations.CreateQuoteRequest) -> operations.CreateQuoteResponse:
         r"""Create Quote
         This API creates an FX quote for a currency pair according to the desired lock period and conversion schedule. The FX rate provided by this API includes the Nium markup and can be utilized for any FX conversion within the quote's validity period.
         """
-        hook_ctx = HookContext(operation_id='createQuote', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='createQuote', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.CreateQuoteRequest, base_url, '/api/v1/client/{clientHashId}/quotes', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         req_content_type, data, form = utils.serialize_request_body(request, operations.CreateQuoteRequest, "quote_creation_request", False, False, 'json')
@@ -111,16 +114,19 @@ class Quotes:
 
     
     
-    def fetch_quote(self, request: operations.FetchQuoteRequest, security: operations.FetchQuoteSecurity) -> operations.FetchQuoteResponse:
+    def fetch_quote(self, request: operations.FetchQuoteRequest) -> operations.FetchQuoteResponse:
         r"""Fetch Quote by ID
         This API allows to fetch a quote. A quote is used to identify the exchange rate, and associated markup and fees.
         """
-        hook_ctx = HookContext(operation_id='fetchQuote', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='fetchQuote', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.FetchQuoteRequest, base_url, '/api/v1/client/{clientHashId}/quotes/{quoteId}', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         headers['Accept'] = 'application/json'

@@ -16,16 +16,19 @@ class Rates:
         
     
     
-    def exchange_rate_v2(self, request: operations.ExchangeRateV2Request, security: operations.ExchangeRateV2Security) -> operations.ExchangeRateV2Response:
+    def exchange_rate_v2(self, request: operations.ExchangeRateV2Request) -> operations.ExchangeRateV2Response:
         r"""Exchange Rate V2
         This API fetches the interbank FX rate for a currency pair. Note that the rate provided does not include the Nium markup.
         """
-        hook_ctx = HookContext(operation_id='ExchangeRateV2', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='ExchangeRateV2', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = base_url + '/api/v2/exchangeRate'
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         query_params = { **utils.get_query_params(operations.ExchangeRateV2Request, request), **query_params }
@@ -72,16 +75,19 @@ class Rates:
 
     
     
-    def aggregated_exchange_rates(self, request: operations.AggregatedExchangeRatesRequest, security: operations.AggregatedExchangeRatesSecurity) -> operations.AggregatedExchangeRatesResponse:
+    def aggregated_exchange_rates(self, request: operations.AggregatedExchangeRatesRequest) -> operations.AggregatedExchangeRatesResponse:
         r"""Fetch historic aggregated exchange rates
         This API will retrieve aggregated time series of historical exchange rate.
         """
-        hook_ctx = HookContext(operation_id='aggregatedExchangeRates', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='aggregatedExchangeRates', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = base_url + '/api/v1/exchangeRates/aggregate'
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         query_params = { **utils.get_query_params(operations.AggregatedExchangeRatesRequest, request), **query_params }

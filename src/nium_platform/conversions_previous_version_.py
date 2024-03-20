@@ -16,16 +16,19 @@ class ConversionsPreviousVersion:
         
     
     
-    def balance_transferwithin_wallet(self, request: operations.BalanceTransferwithinWalletRequest, security: operations.BalanceTransferwithinWalletSecurity) -> operations.BalanceTransferwithinWalletResponse:
+    def balance_transferwithin_wallet(self, request: operations.BalanceTransferwithinWalletRequest) -> operations.BalanceTransferwithinWalletResponse:
         r"""Balance Transfer within Wallet
         This API allows you to transfer the balance from one currency to another within the same customer wallet.
         """
-        hook_ctx = HookContext(operation_id='balanceTransferwithinWallet', oauth2_scopes=[], security_source=security)
+        hook_ctx = HookContext(operation_id='balanceTransferwithinWallet', oauth2_scopes=[], security_source=self.sdk_configuration.security)
         base_url = utils.template_url(*self.sdk_configuration.get_server_details())
         
         url = utils.generate_url(operations.BalanceTransferwithinWalletRequest, base_url, '/api/v1/client/{clientHashId}/customer/{customerHashId}/wallet/{walletHashId}/transfer', request)
         
-        headers, query_params = utils.get_security(security)
+        if callable(self.sdk_configuration.security):
+            headers, query_params = utils.get_security(self.sdk_configuration.security())
+        else:
+            headers, query_params = utils.get_security(self.sdk_configuration.security)
         
         headers = { **utils.get_headers(request), **headers }
         req_content_type, data, form = utils.serialize_request_body(request, operations.BalanceTransferwithinWalletRequest, "wallet_transfer_dto", False, False, 'json')
